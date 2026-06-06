@@ -1,0 +1,117 @@
+/**
+ * Reusable schema.org (JSON-LD) builders. All data flows from the business
+ * config so structured data and on-page content can never drift apart.
+ */
+
+import { businessConfig, type Service } from "@/lib/config/business";
+import { absoluteUrl, getOpeningHoursSpecification, formatPrice } from "@/lib/config/site";
+import type { Faq } from "@/lib/data/content";
+
+const { name, legalName, address, contact, trust, seo, serviceAreas } = businessConfig;
+
+export function getLocalBusinessSchema(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": ["AutoDetailing", "LocalBusiness"],
+    "@id": absoluteUrl("/#business"),
+    name,
+    legalName,
+    description: businessConfig.longDescription,
+    url: seo.siteUrl,
+    telephone: contact.phone,
+    email: contact.email,
+    image: absoluteUrl(seo.ogImage),
+    priceRange: "$$",
+    currenciesAccepted: "CAD",
+    paymentAccepted: "Credit Card, Debit, Cash",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: address.street,
+      addressLocality: address.city,
+      addressRegion: address.provinceCode,
+      postalCode: address.postalCode,
+      addressCountry: address.countryCode,
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: address.coordinates.lat,
+      longitude: address.coordinates.lng,
+    },
+    areaServed: serviceAreas.map((a) => ({ "@type": "City", name: a.name })),
+    openingHoursSpecification: getOpeningHoursSpecification(),
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: trust.googleRating,
+      reviewCount: trust.reviewCount,
+      bestRating: 5,
+      worstRating: 1,
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Detailing services",
+      itemListElement: businessConfig.services.map((s) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: s.name },
+        priceCurrency: s.currency,
+        price: s.priceFrom,
+      })),
+    },
+  };
+}
+
+export function getServiceSchema(service: Service): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": absoluteUrl(`/services/${service.slug}#service`),
+    name: service.name,
+    serviceType: service.name,
+    description: service.longDescription,
+    provider: { "@id": absoluteUrl("/#business"), name },
+    areaServed: serviceAreas.map((a) => ({ "@type": "City", name: a.name })),
+    offers: {
+      "@type": "Offer",
+      url: absoluteUrl(`/services/${service.slug}`),
+      priceCurrency: service.currency,
+      price: service.priceFrom,
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        price: service.priceFrom,
+        priceCurrency: service.currency,
+        valueAddedTaxIncluded: false,
+        description: `Starting price. Final quote depends on vehicle size and condition. From ${formatPrice(
+          service.priceFrom,
+          service.currency,
+        )}.`,
+      },
+      availability: "https://schema.org/InStock",
+    },
+  };
+}
+
+export function getBreadcrumbSchema(
+  items: { name: string; path: string }[],
+): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: absoluteUrl(item.path),
+    })),
+  };
+}
+
+export function getFaqSchema(faqs: Faq[]): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: { "@type": "Answer", text: f.answer },
+    })),
+  };
+}

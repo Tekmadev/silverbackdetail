@@ -1,26 +1,242 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* =========================================================================
+   Silverback Detailing — design tokens (source of truth: design-system/MASTER.md)
+   Tailwind v4 CSS-first config. Static hex so /opacity modifiers work.
+   ========================================================================= */
+@theme {
+  /* Neutrals (ink) */
+  --color-ink: #0a0a0b;
+  --color-ink-2: #121214;
+  --color-ink-3: #1b1b1f;
+  --color-line: #26262b;
+  --color-line-strong: #33333a;
+
+  /* Metallic (silver) */
+  --color-silver: #c7cad1;
+  --color-silver-bright: #edeff3;
+
+  /* Text */
+  --color-bone: #f4f5f7;
+  --color-bone-muted: #9a9da6;
+
+  /* Accent (crimson) */
+  --color-accent: #d11a2a;
+  --color-accent-hover: #b0141f;
+  --color-accent-soft: #2a0e11;
+
+  /* Semantic */
+  --color-success: #3fb67a;
+  --color-warning: #e0a33e;
+
+  /* Radii */
+  --radius: 0.75rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 1.125rem;
+  --radius-xl: 1.5rem;
+
+  /* Container */
+  --container-shell: 1440px;
 }
 
+/* Map next/font CSS variables to theme font tokens (inline = use the var directly). */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-fraunces);
+  --font-body: var(--font-inter-tight);
 }
 
-@media (prefers-color-scheme: dark) {
+/* =========================================================================
+   Base
+   ========================================================================= */
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+  }
+
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Lenis manages smooth scroll. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-accent) 80%, black);
+    color: var(--color-bone);
+  }
+
+  /* Visible, brand-consistent focus ring. Never removed. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  /* Custom scrollbar (desktop pointers only) */
+  @media (pointer: fine) {
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--color-ink);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-line-strong);
+      border-radius: 999px;
+      border: 2px solid var(--color-ink);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-silver);
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* =========================================================================
+   Components / utilities
+   ========================================================================= */
+@layer components {
+  .eyebrow {
+    font-family: var(--font-body), sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-silver);
+  }
+
+  /* Brushed-metal text fill, used sparingly on display words. */
+  .text-metal {
+    background-image: linear-gradient(
+      105deg,
+      var(--color-silver-bright) 0%,
+      var(--color-silver) 30%,
+      #7d8088 50%,
+      var(--color-silver) 70%,
+      var(--color-silver-bright) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 200% auto;
+  }
+
+  /* Ultra-subtle film grain for dark sections. Parent needs position: relative. */
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .vignette {
+    background: radial-gradient(120% 90% at 50% 35%, transparent 40%, rgba(0, 0, 0, 0.55) 100%);
+  }
+}
+
+/* Long-form prose (legal pages, about). */
+.prose-sb {
+  color: var(--color-bone-muted);
+  line-height: 1.75;
+  max-width: 68ch;
+}
+.prose-sb h2 {
+  color: var(--color-bone);
+  font-family: var(--font-display), serif;
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+.prose-sb h3 {
+  color: var(--color-bone);
+  font-size: 1.125rem;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+.prose-sb p {
+  margin-bottom: 1rem;
+}
+.prose-sb ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+.prose-sb li {
+  margin-bottom: 0.375rem;
+}
+.prose-sb a {
+  color: var(--color-silver-bright);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-sb strong {
+  color: var(--color-bone);
+}
+
+/* =========================================================================
+   Keyframes
+   ========================================================================= */
+@keyframes sb-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes sb-shimmer {
+  to { background-position: -200% center; }
+}
+@keyframes sb-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-marquee {
+  animation: sb-marquee 40s linear infinite;
+}
+.animate-shimmer {
+  animation: sb-shimmer 6s linear infinite;
+}
+.animate-fade-up {
+  animation: sb-fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* =========================================================================
+   Reduced motion
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-marquee { animation: none !important; }
 }
