@@ -239,6 +239,13 @@ export const businessConfig = {
     reviewCount: 47,
     certifications: ["Gtechniq Accredited", "IDA Certified"],
   },
+
+  // Media
+  media: {
+    // Hero clip. Encode all-intra for smooth desktop scrubbing:
+    // ffmpeg -i in.mp4 -an -g 1 -bf 0 -c:v libx264 -crf 23 -pix_fmt yuv420p -movflags +faststart out.mp4
+    heroVideo: "/videos/detailwithtools.mp4",
+  },
 } as const;
 
 export type BusinessConfig = typeof businessConfig;
