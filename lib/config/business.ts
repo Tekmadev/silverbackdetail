@@ -245,6 +245,10 @@ export const businessConfig = {
     // Hero clip. Encode all-intra for smooth desktop scrubbing:
     // ffmpeg -i in.mp4 -an -g 1 -bf 0 -c:v libx264 -crf 23 -pix_fmt yuv420p -movflags +faststart out.mp4
     heroVideo: "/videos/detailwithtools.mp4",
+    // Poster frame shown before the video paints, and as the permanent base on
+    // devices where autoplay is blocked. Extract a strong frame from the clip:
+    // ffmpeg -ss 2.5 -i in.mp4 -frames:v 1 -q:v 3 public/images/hero-poster.jpg
+    heroPoster: "/images/hero-poster.jpg",
   },
 } as const;
 

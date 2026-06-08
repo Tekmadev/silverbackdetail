@@ -9,11 +9,18 @@ import { Button } from "@/components/ui/button";
 import { businessConfig } from "@/lib/config/business";
 
 const HERO_VIDEO = businessConfig.media.heroVideo;
+const HERO_POSTER = businessConfig.media.heroPoster;
 
-/**
- * SSR-safe media query hook. Returns false on the server and on the first client
- * render (avoiding hydration mismatch), then updates after hydration.
- */
+/** True only after client hydration. SSR-safe, no effect, no hydration mismatch. */
+function useIsClient(): boolean {
+  return React.useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+}
+
+/** SSR-safe media query. False on the server and during hydration, then updates. */
 function useMediaQuery(query: string): boolean {
   const subscribe = React.useCallback(
     (callback: () => void) => {
@@ -53,19 +60,20 @@ export function ScrollDrivenHero() {
   const hintRef = React.useRef<HTMLDivElement>(null);
   const [hasVideo, setHasVideo] = React.useState(false);
   const reduced = useReducedMotion() ?? false;
+  const isClient = useIsClient();
 
-  // iOS/Safari (and every iOS browser, since they all run WebKit) will not paint
-  // frames produced by seeking video.currentTime on a video that has never been
-  // played. Scroll-scrubbing therefore shows a black hero on touch devices. We
-  // detect a coarse pointer and, on those devices, autoplay-loop the video instead
-  // of scrubbing it. The scroll-driven text choreography stays on every device.
+  // Progressive enhancement. The scroll-scrubbed cinematic is a desktop treat: it
+  // relies on seeking video.currentTime, which mobile WebKit (every iOS browser)
+  // renders unreliably. Touch devices, reduced-motion users, and the server render
+  // all get the clean autoplay hero instead, so mobile is rock solid and never
+  // flickers. Only a fine-pointer client upgrades to the scrub experience.
   const touch = useMediaQuery("(pointer: coarse)");
-  const scrub = !reduced && !touch;
+  const scrub = isClient && !reduced && !touch;
 
   // Smoothed video scrubbing (desktop only). The scroll callback only sets a target
   // time; a RAF loop lerps currentTime toward it so the decoder is never asked to
-  // seek faster than it can decode. Works smoothly because the source is encoded
-  // all-intra (every frame a keyframe), making arbitrary seeks cheap.
+  // seek faster than it can decode. Smooth because the source is encoded all-intra
+  // (every frame a keyframe), making arbitrary seeks cheap.
   const videoTargetRef = React.useRef(0);
 
   React.useEffect(() => {
@@ -93,8 +101,8 @@ export function ScrollDrivenHero() {
     };
   }, [scrub]);
 
-  // Autoplay path (touch devices + reduced motion). Desktop scrubbing keeps the
-  // video paused so currentTime is fully under scroll control.
+  // Autoplay path (mobile + reduced motion). Desktop scrubbing keeps the video
+  // paused so currentTime stays fully under scroll control.
   React.useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -102,14 +110,13 @@ export function ScrollDrivenHero() {
       video.pause();
       return;
     }
-    video.muted = true; // belt-and-suspenders: iOS blocks autoplay if not muted as a property
+    video.muted = true; // iOS only allows inline autoplay when muted is a property
     const tryPlay = () => {
       const p = video.play();
       if (p) p.catch(() => {});
     };
     tryPlay();
-    // Some iOS states (Low Power Mode, etc.) block autoplay until a gesture; retry
-    // once on the first interaction.
+    // Some iOS states (Low Power Mode) block autoplay until a gesture; retry once.
     const onInteract = () => tryPlay();
     window.addEventListener("touchstart", onInteract, { once: true, passive: true });
     window.addEventListener("click", onInteract, { once: true });
@@ -121,13 +128,12 @@ export function ScrollDrivenHero() {
 
   useGSAP(
     () => {
-      if (reduced) return; // static composition handled in markup
+      if (!scrub) return; // autoplay hero is plain markup, no ScrollTrigger
       const wrapper = wrapperRef.current;
       const stage = stageRef.current;
       if (!wrapper || !stage) return;
 
       const setVideoTime = (p: number) => {
-        if (!scrub) return; // touch devices autoplay-loop; no scrubbing
         const video = videoRef.current;
         if (!video || !Number.isFinite(video.duration) || video.duration === 0) return;
         videoTargetRef.current = Math.min(video.duration - 0.05, Math.max(0, p * video.duration));
@@ -137,8 +143,8 @@ export function ScrollDrivenHero() {
         phaseRefs.current.forEach((el, i) => {
           if (!el) return;
           const ph = PHASES[i];
-          // The first phrase is fully visible at the top, then fades out, so the
-          // hero never paints empty on load.
+          // First phrase is fully visible at the top, then fades, so the hero never
+          // paints empty on load.
           const o =
             i === 0
               ? p < ph.end - 0.06
@@ -178,7 +184,7 @@ export function ScrollDrivenHero() {
 
       return () => st.kill();
     },
-    { scope: wrapperRef, dependencies: [reduced, scrub] },
+    { scope: wrapperRef, dependencies: [scrub] },
   );
 
   return (
@@ -189,12 +195,10 @@ export function ScrollDrivenHero() {
         {businessConfig.address.province}
       </h1>
 
-      {reduced ? (
-        <StaticHero hasVideo={hasVideo} onVideo={setHasVideo} videoRef={videoRef} />
-      ) : (
+      {scrub ? (
         <div ref={wrapperRef} className="relative h-[400vh]">
           <div ref={stageRef} className="relative h-dvh w-full overflow-hidden">
-            <HeroBackground hasVideo={hasVideo} onVideo={setHasVideo} videoRef={videoRef} autoplay={!scrub} />
+            <HeroBackground hasVideo={hasVideo} onVideo={setHasVideo} videoRef={videoRef} autoplay={false} />
 
             {/* Phase phrases */}
             <div className="absolute inset-0 z-20 flex items-center justify-center px-6" aria-hidden>
@@ -246,15 +250,19 @@ export function ScrollDrivenHero() {
             </div>
           </div>
         </div>
+      ) : (
+        <StaticHero hasVideo={hasVideo} onVideo={setHasVideo} videoRef={videoRef} />
       )}
     </section>
   );
 }
 
 /**
- * Cinematic layered background. On desktop the video's currentTime is scrubbed by
- * scroll (autoplay off). On touch devices and in the reduced-motion fallback it
- * autoplays and loops instead, because iOS WebKit will not paint scrubbed frames.
+ * Cinematic layered background. A poster image is always painted underneath, so the
+ * hero is never black or empty. On desktop the video's currentTime is scrubbed by
+ * scroll (autoplay off) and fades in once a frame is ready. On touch / reduced
+ * motion it autoplays and loops, fading in only once it is genuinely playing, which
+ * avoids the frame-then-blank flicker iOS produces.
  */
 function HeroBackground({
   hasVideo,
@@ -267,39 +275,43 @@ function HeroBackground({
   videoRef: React.RefObject<HTMLVideoElement | null>;
   autoplay?: boolean;
 }) {
+  const reveal = () => onVideo(true);
   return (
     <div className="absolute inset-0 z-0">
-      {/* Fallback composition: always rendered, hidden behind the video when it loads. */}
+      {/* Fallback composition: always rendered, hidden behind the poster/video. */}
       <div className="absolute inset-0 bg-ink">
         <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_-10%,#1d1f24_0%,#0a0a0b_55%,#000_100%)]" />
         <div className="absolute left-[12%] top-[20%] size-[42vw] rounded-full bg-silver/10 blur-[120px] animate-[sb-float_9s_ease-in-out_infinite]" />
         <div className="absolute right-[8%] top-[35%] size-[34vw] rounded-full bg-accent/15 blur-[130px] animate-[sb-float_11s_ease-in-out_infinite]" />
-        {/* studio horizon line */}
         <div className="absolute inset-x-0 top-[62%] h-px bg-gradient-to-r from-transparent via-silver/30 to-transparent" />
       </div>
+
+      {/* Poster base: guarantees a strong, on-brand image even if the video never
+          plays (Low Power Mode, slow network, decode failure). */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={HERO_POSTER} alt="" aria-hidden className="absolute inset-0 size-full object-cover" />
 
       <video
         ref={(node) => {
           videoRef.current = node;
           if (node) {
-            // React does not reliably set `muted` as a DOM property; iOS requires it
-            // as a property for inline autoplay, so set it imperatively.
             node.muted = true;
-            // A locally served video can finish loading before React attaches the
-            // event handlers, so the loadedmetadata event is missed. Catch that by
-            // checking readyState the moment the element mounts.
-            if (node.readyState >= 1) onVideo(true);
+            // For the scrub path we just need a decoded frame; reveal early. For the
+            // autoplay path we wait for the `playing` event instead (see below).
+            if (!autoplay && node.readyState >= 2) onVideo(true);
           }
         }}
         src={HERO_VIDEO}
+        poster={HERO_POSTER}
         playsInline
         muted
         loop={autoplay}
         autoPlay={autoplay}
         preload="auto"
-        onLoadedMetadata={() => onVideo(true)}
-        onLoadedData={() => onVideo(true)}
-        onCanPlay={() => onVideo(true)}
+        onLoadedMetadata={autoplay ? undefined : reveal}
+        onLoadedData={autoplay ? undefined : reveal}
+        onCanPlay={autoplay ? undefined : reveal}
+        onPlaying={autoplay ? reveal : undefined}
         onError={() => onVideo(false)}
         className={`absolute inset-0 size-full object-cover transition-opacity duration-700 ${
           hasVideo ? "opacity-100" : "opacity-0"
@@ -317,7 +329,7 @@ function HeroBackground({
   );
 }
 
-/** Reduced-motion / fallback static hero. */
+/** Clean autoplay hero for mobile, reduced motion, and the pre-hydration render. */
 function StaticHero({
   hasVideo,
   onVideo,
