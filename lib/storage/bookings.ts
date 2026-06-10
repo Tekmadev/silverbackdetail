@@ -78,3 +78,36 @@ export async function updateBooking(
   const { error } = await db.from("bookings").update(row).eq("id", id);
   if (error) console.error("[storage] updateBooking failed:", error.message);
 }
+
+/** True when a confirmed/pending booking already occupies the given date+time. */
+export async function isSlotDoubleBooked(date: string, time: string): Promise<boolean> {
+  if (!isSupabaseEnabled()) return false;
+  const db = getSupabaseAdmin();
+  if (!db) return false;
+  const { data } = await db
+    .from("bookings")
+    .select("id")
+    .eq("date", date)
+    .eq("time", time)
+    .in("status", ["pending", "confirmed"])
+    .limit(1);
+  return Boolean(data && data.length > 0);
+}
+
+/** Returns a set of "YYYY-MM-DD:HH:MM" keys for all booked slots in a date range. */
+export async function getBookedSlots(startDate: string, endDate: string): Promise<Set<string>> {
+  const result = new Set<string>();
+  if (!isSupabaseEnabled()) return result;
+  const db = getSupabaseAdmin();
+  if (!db) return result;
+  const { data } = await db
+    .from("bookings")
+    .select("date, time")
+    .gte("date", startDate)
+    .lte("date", endDate)
+    .in("status", ["pending", "confirmed"]);
+  if (data) {
+    for (const row of data) result.add(`${row.date}:${row.time}`);
+  }
+  return result;
+}

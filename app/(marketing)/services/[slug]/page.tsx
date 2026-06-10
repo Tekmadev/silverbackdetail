@@ -11,9 +11,10 @@ import { CallToAction } from "@/components/shared/CallToAction";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { FadeUp } from "@/components/animations/FadeUp";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getServiceSchema, getBreadcrumbSchema, getFaqSchema } from "@/lib/seo/schema";
+import { getServiceSchema, getBreadcrumbSchema, getFaqSchema, getServiceHowToSchema } from "@/lib/seo/schema";
 import { businessConfig } from "@/lib/config/business";
 import { getServiceBySlug, formatPrice } from "@/lib/config/site";
+import { processSteps } from "@/lib/data/content";
 import type { Faq } from "@/lib/data/content";
 
 export function generateStaticParams() {
@@ -77,6 +78,7 @@ export default async function ServiceDetailPage({
     <>
       <JsonLd id={`service-${slug}-schema`} data={getServiceSchema(service)} />
       <JsonLd id={`service-${slug}-faq`} data={getFaqSchema(faqs)} />
+      <JsonLd id={`service-${slug}-howto`} data={getServiceHowToSchema(service, processSteps)} />
       <JsonLd
         id={`service-${slug}-breadcrumb`}
         data={getBreadcrumbSchema([

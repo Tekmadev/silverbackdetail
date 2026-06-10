@@ -5,7 +5,7 @@
 
 import { businessConfig, type Service } from "@/lib/config/business";
 import { absoluteUrl, getOpeningHoursSpecification, formatPrice } from "@/lib/config/site";
-import type { Faq } from "@/lib/data/content";
+import type { Faq, ProcessStep, Testimonial } from "@/lib/data/content";
 
 const { name, legalName, address, contact, trust, seo, serviceAreas } = businessConfig;
 
@@ -112,6 +112,83 @@ export function getFaqSchema(faqs: Faq[]): Record<string, unknown> {
       "@type": "Question",
       name: f.question,
       acceptedAnswer: { "@type": "Answer", text: f.answer },
+    })),
+  };
+}
+
+export function getHowToSchema(steps: ProcessStep[]): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "@id": absoluteUrl("/#how-we-work"),
+    name: `How ${name} works`,
+    description: `Our proven ${steps.length}-step detailing process for showroom-grade results in ${businessConfig.address.city}.`,
+    totalTime: "PT4H",
+    step: steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.title,
+      text: s.description,
+    })),
+  };
+}
+
+export function getVideoObjectSchema(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "@id": absoluteUrl("/#hero-video"),
+    name: `${name} — Professional Car Detailing in ${address.city}, Ontario`,
+    description: businessConfig.longDescription,
+    thumbnailUrl: absoluteUrl(seo.ogImage),
+    contentUrl: absoluteUrl(businessConfig.media.heroVideo),
+    uploadDate: `${businessConfig.foundedYear}-01-01`,
+    publisher: { "@id": absoluteUrl("/#organization"), name },
+  };
+}
+
+export function getReviewsSchema(testimonials: Testimonial[]): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": absoluteUrl("/#reviews"),
+    name: `Customer reviews — ${name}`,
+    itemListElement: testimonials.map((t, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Review",
+        reviewBody: t.quote,
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: t.rating,
+          bestRating: 5,
+          worstRating: 1,
+        },
+        author: { "@type": "Person", name: t.name },
+        itemReviewed: { "@id": absoluteUrl("/#business"), name },
+      },
+    })),
+  };
+}
+
+export function getServiceHowToSchema(service: Service, steps: ProcessStep[]): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "@id": absoluteUrl(`/services/${service.slug}#how-it-works`),
+    name: `How ${service.name} works at ${name}`,
+    description: service.longDescription,
+    estimatedCost: {
+      "@type": "MonetaryAmount",
+      currency: service.currency,
+      value: service.priceFrom,
+    },
+    step: steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.title,
+      text: s.description,
     })),
   };
 }
