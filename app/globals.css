@@ -206,6 +206,16 @@
 /* =========================================================================
    Keyframes
    ========================================================================= */
+@keyframes sb-loader-fill {
+  from { width: 0%; }
+  to   { width: 80%; }
+}
+
+@keyframes sb-loader-wordmark {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes sb-marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }

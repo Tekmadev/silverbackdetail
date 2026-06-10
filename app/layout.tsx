@@ -6,6 +6,7 @@ import "./globals.css";
 import { businessConfig } from "@/lib/config/business";
 import { absoluteUrl } from "@/lib/config/site";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { SiteLoader } from "@/components/SiteLoader";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -94,6 +95,88 @@ export default function RootLayout({
   return (
     <html lang="en-CA" className={`${fraunces.variable} ${interTight.variable}`} suppressHydrationWarning>
       <body className="min-h-dvh bg-ink text-bone">
+        {/*
+          Site loader — static HTML painted before React hydrates.
+          Inline styles are intentional: they must not depend on any stylesheet
+          that might load after the HTML. The SiteLoader client component below
+          drives the animated exit once window.load fires.
+        */}
+        <div
+          id="sb-loader"
+          aria-hidden="true"
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            backgroundColor: "#0a0a0b",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "2rem",
+          }}
+        >
+          {/* Wordmark */}
+          <div
+            style={{
+              textAlign: "center",
+              animation: "sb-loader-wordmark 0.7s cubic-bezier(0.16,1,0.3,1) both",
+              animationDelay: "0.1s",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "var(--font-fraunces, Georgia, serif)",
+                fontSize: "clamp(1.8rem, 5vw, 2.75rem)",
+                fontWeight: 600,
+                color: "#f5f1ec",
+                letterSpacing: "-0.04em",
+                margin: 0,
+                lineHeight: 1,
+              }}
+            >
+              Silverback
+            </p>
+            <p
+              style={{
+                fontFamily: "var(--font-inter-tight, system-ui, sans-serif)",
+                fontSize: "0.7rem",
+                color: "rgba(245,241,236,0.35)",
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                margin: "0.6rem 0 0",
+              }}
+            >
+              Detail beyond the surface.
+            </p>
+          </div>
+
+          {/* Progress track */}
+          <div
+            style={{
+              width: "100px",
+              height: "1px",
+              backgroundColor: "rgba(245,241,236,0.12)",
+              borderRadius: "1px",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              id="sb-loader-bar"
+              style={{
+                height: "100%",
+                width: "0%",
+                backgroundColor: "#d11a2a",
+                borderRadius: "1px",
+                animation: "sb-loader-fill 1.6s cubic-bezier(0.16,1,0.3,1) forwards",
+                animationDelay: "0.15s",
+              }}
+            />
+          </div>
+        </div>
+
+        <SiteLoader />
+
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-bone"
