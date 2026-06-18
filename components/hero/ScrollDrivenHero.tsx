@@ -8,7 +8,8 @@ import { useGSAP, gsap, ScrollTrigger } from "@/lib/animations/gsap-setup";
 import { Button } from "@/components/ui/button";
 import { businessConfig } from "@/lib/config/business";
 
-const HERO_VIDEO = businessConfig.media.heroVideo;
+const HERO_VIDEO_DESKTOP = businessConfig.media.heroVideo; // all-intra, scrubbed
+const HERO_VIDEO_MOBILE = businessConfig.media.heroVideoMobile; // compressed, autoplay
 const HERO_POSTER = businessConfig.media.heroPoster;
 
 /** True only after client hydration. SSR-safe, no effect, no hydration mismatch. */
@@ -198,7 +199,13 @@ export function ScrollDrivenHero() {
       {scrub ? (
         <div ref={wrapperRef} className="relative h-[400vh]">
           <div ref={stageRef} className="relative h-dvh w-full overflow-hidden">
-            <HeroBackground hasVideo={hasVideo} onVideo={setHasVideo} videoRef={videoRef} autoplay={false} />
+            <HeroBackground
+              src={HERO_VIDEO_DESKTOP}
+              hasVideo={hasVideo}
+              onVideo={setHasVideo}
+              videoRef={videoRef}
+              autoplay={false}
+            />
 
             {/* Phase phrases */}
             <div className="absolute inset-0 z-20 flex items-center justify-center px-6" aria-hidden>
@@ -265,11 +272,13 @@ export function ScrollDrivenHero() {
  * avoids the frame-then-blank flicker iOS produces.
  */
 function HeroBackground({
+  src,
   hasVideo,
   onVideo,
   videoRef,
   autoplay = false,
 }: {
+  src: string;
   hasVideo: boolean;
   onVideo: (v: boolean) => void;
   videoRef: React.RefObject<HTMLVideoElement | null>;
@@ -301,7 +310,7 @@ function HeroBackground({
             if (!autoplay && node.readyState >= 2) onVideo(true);
           }
         }}
-        src={HERO_VIDEO}
+        src={src}
         poster={HERO_POSTER}
         playsInline
         muted
@@ -341,7 +350,7 @@ function StaticHero({
 }) {
   return (
     <div className="relative flex min-h-dvh items-center justify-center overflow-hidden px-6 pt-20 text-center">
-      <HeroBackground hasVideo={hasVideo} onVideo={onVideo} videoRef={videoRef} autoplay />
+      <HeroBackground src={HERO_VIDEO_MOBILE} hasVideo={hasVideo} onVideo={onVideo} videoRef={videoRef} autoplay />
       <div className="relative z-20 flex max-w-3xl flex-col items-center gap-6">
         <p className="eyebrow animate-fade-up">Hamilton, Ontario</p>
         <p

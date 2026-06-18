@@ -242,11 +242,15 @@ export const businessConfig = {
 
   // Media
   media: {
-    // Hero clip. Encode all-intra for smooth desktop scrubbing:
+    // Desktop hero clip, scrubbed by scroll. Must be all-intra (every frame a
+    // keyframe) for smooth seeking:
     // ffmpeg -i in.mp4 -an -g 1 -bf 0 -c:v libx264 -crf 23 -pix_fmt yuv420p -movflags +faststart out.mp4
-    heroVideo: "/videos/detailwithtools.mp4",
-    // Poster frame shown before the video paints, and as the permanent base on
-    // devices where autoplay is blocked. Extract a strong frame from the clip:
+    heroVideo: "/videos/hero-scrub.mp4",
+    // Mobile / reduced-motion hero clip, autoplayed and looped. No scrubbing, so a
+    // small standard encode is fine and loads faster on cellular.
+    heroVideoMobile: "/videos/hero.mp4",
+    // Poster shown before the video paints, and as the permanent base when autoplay
+    // is blocked. Extract a strong frame:
     // ffmpeg -ss 2.5 -i in.mp4 -frames:v 1 -q:v 3 public/images/hero-poster.jpg
     heroPoster: "/images/hero-poster.jpg",
   },
