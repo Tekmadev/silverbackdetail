@@ -129,7 +129,7 @@ Set these in `.env.local` (and in Vercel project settings for production). See `
 1. Push this repo to GitHub/GitLab/Bitbucket.
 2. Import it in Vercel. Framework preset: **Next.js** (auto-detected).
 3. Add environment variables (any subset of `.env.example`) in **Project → Settings → Environment Variables**. The site deploys and runs even with none set.
-4. Add the domain `silverbackdetailing.ca` in **Project → Settings → Domains**.
+4. Add the domain `silverbackdetail.com` in **Project → Settings → Domains**.
 5. (If using Stripe) add the production webhook endpoint and set `STRIPE_WEBHOOK_SECRET`.
 
 Vercel Analytics and Speed Insights are already wired in `app/layout.tsx`.
@@ -146,4 +146,4 @@ The scroll-driven hero scrubs `public/videos/hero-transformation.mp4` if present
 
 - No `framer-motion` (it's `motion`, imported from `motion/react`). No `@studio-freight/react-lenis` (it's `lenis/react`). No `@supabase/auth-helpers-nextjs` (it's `@supabase/ssr` / `supabase-js`).
 - React Compiler is left off by default for build stability; enable it via `experimental.reactCompiler` in `next.config.ts` (requires `babel-plugin-react-compiler`) once profiling warrants it.
-- Replace the placeholder phone number (`(905) 555-0142`, a reserved fictional range), address, and social handles in `business.ts` before launch.
+- The phone number and email in `business.ts` are the real business contact details. Replace the placeholder address and social handles before launch.

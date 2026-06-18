@@ -37,7 +37,7 @@ export function getServiceAreaBySlug(slug: string) {
   return businessConfig.serviceAreas.find((a) => a.slug === slug);
 }
 
-/** "+1-905-555-0142" -> "tel:+19055550142" */
+/** "+1-905-519-6290" -> "tel:+19055196290" */
 export function formatPhoneForLink(phone: string = businessConfig.contact.phone): string {
   return `tel:${phone.replace(/[^+\d]/g, "")}`;
 }

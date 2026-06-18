@@ -5,8 +5,8 @@
  * Changing a phone number, price, or service is a single edit here. Never hardcode
  * any of this data anywhere else in the codebase.
  *
- * Phone numbers in the 555-01xx range are reserved for fictional use; replace the
- * contact details, address, and social handles with the real ones before launch.
+ * The phone number and email below are the real business contact details. The
+ * address and social handles are still placeholders; replace them before launch.
  */
 
 export const businessConfig = {
@@ -21,11 +21,11 @@ export const businessConfig = {
 
   // Contact
   contact: {
-    phone: "+1-905-555-0142",
-    phoneDisplay: "(905) 555-0142",
-    email: "info@silverbackdetailing.ca",
-    bookingEmail: "book@silverbackdetailing.ca",
-    supportEmail: "support@silverbackdetailing.ca",
+    phone: "+1-905-519-6290",
+    phoneDisplay: "(905) 519-6290",
+    email: "silverbackvehicledetailing@gmail.com",
+    bookingEmail: "silverbackvehicledetailing@gmail.com",
+    supportEmail: "silverbackvehicledetailing@gmail.com",
   },
 
   // Physical address
@@ -212,7 +212,7 @@ export const businessConfig = {
 
   // SEO
   seo: {
-    siteUrl: "https://silverbackdetailing.ca",
+    siteUrl: "https://silverbackdetail.com",
     defaultTitle: "Silverback Detailing | Premium Car Detailing in Hamilton, ON",
     titleTemplate: "%s | Silverback Detailing",
     defaultDescription:

@@ -61,7 +61,7 @@ export function buildIcs(record: BookingRecord, opts: { durationHours?: number }
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",
-    `UID:${record.id}@silverbackdetailing.ca`,
+    `UID:${record.id}@silverbackdetail.com`,
     `DTSTAMP:${stamp}`,
     `DTSTART:${startLocal}`,
     `DTEND:${endLocal}`,
