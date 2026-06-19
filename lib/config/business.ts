@@ -242,6 +242,12 @@ export const businessConfig = {
 
   // Media
   media: {
+    // Brand logo, circle crop with transparent corners. Used as the inline mark
+    // in the header, footer, and nav lockups.
+    logoMark: "/images/logo/silverback-circle.png",
+    // Full square badge (dark background). Reserved for share cards and contexts
+    // that need a solid backdrop.
+    logo: "/images/logo/silverback-logo.png",
     // Desktop hero clip, scrubbed by scroll. Must be all-intra (every frame a
     // keyframe) for smooth seeking:
     // ffmpeg -i in.mp4 -an -g 1 -bf 0 -c:v libx264 -crf 23 -pix_fmt yuv420p -movflags +faststart out.mp4

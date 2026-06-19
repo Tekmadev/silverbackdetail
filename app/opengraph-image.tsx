@@ -1,9 +1,16 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { businessConfig } from "@/lib/config/business";
 
-export const alt = `${businessConfig.name} — ${businessConfig.tagline}`;
+export const alt = `${businessConfig.name}. ${businessConfig.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+// Read the circle logo once at module load and inline it as a data URI, since
+// ImageResponse cannot resolve site-relative asset URLs at generation time.
+const logoData = readFileSync(join(process.cwd(), "public/images/logo/silverback-circle.png"));
+const logoSrc = `data:image/png;base64,${logoData.toString("base64")}`;
 
 export default function OpengraphImage() {
   const { name, tagline, address, trust } = businessConfig;
@@ -26,23 +33,9 @@ export default function OpengraphImage() {
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          <div
-            style={{
-              width: 56,
-              height: 56,
-              borderRadius: 14,
-              border: "2px solid #c7cad1",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 30,
-              fontWeight: 700,
-              color: "#c7cad1",
-            }}
-          >
-            S
-          </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={logoSrc} width={64} height={64} alt="" style={{ display: "flex" }} />
           <div style={{ display: "flex", fontSize: 30, fontWeight: 600, letterSpacing: -0.5 }}>{name}</div>
         </div>
 

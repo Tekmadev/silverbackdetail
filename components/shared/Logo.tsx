@@ -1,9 +1,11 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { businessConfig } from "@/lib/config/business";
 
 /**
- * Brand lockup: a metallic emblem (interlocked chevrons evoking a silverback's
- * crest) plus the wordmark. Pure SVG so it scales crisply and themes cleanly.
+ * Brand lockup: the silverback emblem (circle crop, transparent corners) beside
+ * the wordmark. The source is a 1024px master that next/image downscales and
+ * serves as AVIF/WebP, so it stays crisp on retina without shipping the full file.
  */
 export function Logo({
   className,
@@ -16,37 +18,15 @@ export function Logo({
 }) {
   return (
     <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <svg
+      <Image
+        src={businessConfig.media.logoMark}
+        alt={`${businessConfig.name} logo`}
         width={size}
         height={size}
-        viewBox="0 0 32 32"
-        fill="none"
-        aria-hidden="true"
+        priority
+        sizes={`${size}px`}
         className="shrink-0"
-      >
-        <defs>
-          <linearGradient id="sb-metal" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#EDEFF3" />
-            <stop offset="0.5" stopColor="#C7CAD1" />
-            <stop offset="1" stopColor="#7D8088" />
-          </linearGradient>
-        </defs>
-        <rect x="1" y="1" width="30" height="30" rx="8" stroke="url(#sb-metal)" strokeWidth="1.5" />
-        <path
-          d="M9 21.5L16 9l7 12.5"
-          stroke="url(#sb-metal)"
-          strokeWidth="2.4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M11.5 22.5L16 14.5l4.5 8"
-          stroke="#D11A2A"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+      />
       {showWordmark && (
         <span className="font-display text-lg font-semibold tracking-tight text-bone">
           {businessConfig.name}
