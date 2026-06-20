@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Check, X, Clock, Tag, ShieldCheck, ArrowRight } from "lucide-react";
+import { Check, X, Clock, Tag, ShieldCheck, ArrowRight, Car } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -89,7 +89,7 @@ export default async function ServiceDetailPage({
       />
 
       <PageHeader
-        eyebrow={service.category === "premium" ? "Correction & protection" : service.category === "mobile" ? "Mobile service" : "Detailing"}
+        eyebrow={service.category === "premium" ? "Correction & protection" : "Detailing"}
         title={service.name}
         description={service.shortDescription}
         breadcrumbs={[
@@ -108,6 +108,11 @@ export default async function ServiceDetailPage({
           {service.requiresDeposit && (
             <Badge variant="accent">
               <ShieldCheck className="size-3.5" /> {formatPrice(service.depositAmount, service.currency)} refundable deposit
+            </Badge>
+          )}
+          {service.mobileAvailable && (
+            <Badge variant="outline">
+              <Car className="size-3.5" /> Mobile available
             </Badge>
           )}
         </div>
@@ -214,7 +219,7 @@ export default async function ServiceDetailPage({
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-bone-muted">Where</dt>
-                    <dd className="text-bone">{service.category === "mobile" ? "Mobile or in-shop" : "In-shop or mobile"}</dd>
+                    <dd className="text-bone">{service.mobileAvailable ? "In-shop or mobile" : "In-shop only"}</dd>
                   </div>
                   {service.requiresDeposit && (
                     <div className="flex justify-between">

@@ -19,11 +19,10 @@ export const metadata: Metadata = {
 const CATEGORY_TITLES: Record<string, { eyebrow: string; title: string }> = {
   standard: { eyebrow: "Everyday care", title: "Detailing packages" },
   premium: { eyebrow: "Correction & protection", title: "Premium services" },
-  mobile: { eyebrow: "We come to you", title: "Mobile detailing" },
 };
 
 export default function ServicesPage() {
-  const categories: Array<keyof typeof CATEGORY_TITLES> = ["premium", "standard", "mobile"];
+  const categories: Array<keyof typeof CATEGORY_TITLES> = ["premium", "standard"];
   return (
     <>
       <JsonLd

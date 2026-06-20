@@ -188,7 +188,7 @@ export const faqs: Faq[] = [
   {
     question: "Do you offer mobile detailing?",
     answer:
-      "Yes. Our self-contained mobile unit carries its own water and power, so we can detail your vehicle at your home or workplace anywhere in Hamilton, Burlington, Ancaster, Stoney Creek, Dundas, and Waterdown. Mobile detailing starts at $200 CAD.",
+      "Yes. Mobile is a way we deliver our services rather than a separate package: any detail that finishes in under a day, such as an exterior detail, interior detail, or headlight restoration, can be done at your home or workplace. Our self-contained unit carries its own water and power, so all we need is a parking spot. Multi-day work like paint correction and ceramic coating is done in-shop. We cover Hamilton, Burlington, Ancaster, Stoney Creek, Dundas, and Waterdown.",
   },
   {
     question: "Is my deposit refundable?",

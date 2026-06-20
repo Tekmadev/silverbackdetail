@@ -73,9 +73,10 @@ export function ServiceCard({ service, className }: { service: Service; classNam
               <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_0%,rgba(255,255,255,0.08),transparent)]" />
             </>
           )}
-          <div className="absolute left-5 top-5 flex gap-2">
+          <div className="absolute left-5 top-5 flex flex-wrap gap-2">
             {service.featured && <Badge variant="accent">Featured</Badge>}
             {service.requiresDeposit && <Badge variant="outline">Deposit secures slot</Badge>}
+            {service.mobileAvailable && <Badge variant="outline">Mobile available</Badge>}
           </div>
           <div className="absolute bottom-5 right-5 flex size-10 items-center justify-center rounded-full border border-line-strong bg-ink/60 text-bone backdrop-blur transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1">
             <ArrowUpRight className="size-5" />
