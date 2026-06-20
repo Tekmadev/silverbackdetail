@@ -179,7 +179,7 @@ export const businessConfig = {
       slug: "ceramic-coating",
       name: "Ceramic Coating",
       category: "premium",
-      image: "",
+      image: "/images/services-detailing/Ceramic-coating.webp",
       shortDescription: "Years of protection with a glass-like finish.",
       longDescription:
         "Professional ceramic coating application with paint correction prep. Hydrophobic, UV resistant, and chemically resistant. Choose from 2, 5, or 9 year packages.",
