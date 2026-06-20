@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, Clock } from "lucide-react";
 import { motion, useMotionValue, useSpring, useReducedMotion, useTransform } from "motion/react";
 import { Badge } from "@/components/ui/badge";
@@ -52,8 +53,26 @@ export function ServiceCard({ service, className }: { service: Service; classNam
             CATEGORY_GRADIENT[service.category] ?? CATEGORY_GRADIENT.standard,
           )}
         >
-          <div aria-hidden className="grain absolute inset-0" />
-          <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_0%,rgba(255,255,255,0.08),transparent)]" />
+          {service.image ? (
+            <>
+              <Image
+                src={service.image}
+                alt={service.name}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              />
+              <div
+                aria-hidden
+                className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-ink/40"
+              />
+            </>
+          ) : (
+            <>
+              <div aria-hidden className="grain absolute inset-0" />
+              <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_0%,rgba(255,255,255,0.08),transparent)]" />
+            </>
+          )}
           <div className="absolute left-5 top-5 flex gap-2">
             {service.featured && <Badge variant="accent">Featured</Badge>}
             {service.requiresDeposit && <Badge variant="outline">Deposit secures slot</Badge>}

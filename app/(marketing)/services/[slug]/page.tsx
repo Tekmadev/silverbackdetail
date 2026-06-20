@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Check, X, Clock, Tag, ShieldCheck, ArrowRight } from "lucide-react";
 import { Container } from "@/components/shared/Container";
@@ -110,6 +111,24 @@ export default async function ServiceDetailPage({
           )}
         </div>
       </PageHeader>
+
+      {service.image && (
+        <section className="pt-10 md:pt-14">
+          <Container>
+            <div className="relative aspect-[21/9] w-full overflow-hidden rounded-2xl border border-line">
+              <Image
+                src={service.image}
+                alt={`${service.name} by ${businessConfig.name}`}
+                fill
+                sizes="(max-width: 1024px) 100vw, 1024px"
+                className="object-cover"
+                priority
+              />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink/50 to-transparent" />
+            </div>
+          </Container>
+        </section>
+      )}
 
       <section className="py-16 md:py-24">
         <Container>

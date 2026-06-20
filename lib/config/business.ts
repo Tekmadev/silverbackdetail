@@ -76,6 +76,7 @@ export const businessConfig = {
       slug: "exterior-detail",
       name: "Exterior Detail",
       category: "standard",
+      image: "/images/services-detailing/exterior.jpg",
       shortDescription: "Hand wash, decontamination, and protective wax.",
       longDescription:
         "Full exterior hand wash with foam pre-soak, iron decontamination, clay bar treatment, and a layer of premium carnauba wax or sealant for 3 to 6 months of protection.",
@@ -101,6 +102,7 @@ export const businessConfig = {
       slug: "interior-detail",
       name: "Interior Detail",
       category: "standard",
+      image: "/images/services-detailing/interior.webp",
       shortDescription: "Deep cleaning, conditioning, and odour neutralization.",
       longDescription:
         "Complete interior vacuum, steam clean, leather conditioning, plastic restoration, and ozone odour treatment that leaves the cabin feeling factory fresh.",
@@ -123,9 +125,35 @@ export const businessConfig = {
       featured: false,
     },
     {
+      slug: "headlight-restoration",
+      name: "Headlight Restoration",
+      category: "standard",
+      image: "/images/services-detailing/headlight-restoration.webp",
+      shortDescription: "Cut through yellowed, hazy lenses for clear, safer headlights.",
+      longDescription:
+        "Oxidized headlights scatter light and dull the whole front of the car. We wet-sand, multi-stage machine polish, and seal each lens back to optical clarity, then lock it in with a UV-resistant coating so they stay clear far longer than a quick buff.",
+      includes: [
+        "Wet-sanding of oxidized, yellowed lenses",
+        "Multi-stage machine polishing to clarity",
+        "Both headlights restored",
+        "UV-resistant protective sealant",
+        "Improved night-time visibility and safety",
+      ],
+      excludes: ["Cracked or internally fogged lenses (replacement quoted separately)", "Tail light tinting"],
+      priceFrom: 120,
+      currency: "CAD",
+      duration: "1 to 2 hours",
+      requiresDeposit: false,
+      depositAmount: 0,
+      depositRefundable: false,
+      depositRefundWindowHours: 0,
+      featured: false,
+    },
+    {
       slug: "paint-correction",
       name: "Paint Correction",
       category: "premium",
+      image: "/images/services-detailing/gloss-enhancer.webp",
       shortDescription: "Restore your paint to better than new condition.",
       longDescription:
         "Multi-stage machine polishing to remove swirls, scratches, oxidation, and water spots. Includes paint depth measurement, masking, and a finishing polish for true mirror-clear gloss.",
@@ -151,6 +179,7 @@ export const businessConfig = {
       slug: "ceramic-coating",
       name: "Ceramic Coating",
       category: "premium",
+      image: "",
       shortDescription: "Years of protection with a glass-like finish.",
       longDescription:
         "Professional ceramic coating application with paint correction prep. Hydrophobic, UV resistant, and chemically resistant. Choose from 2, 5, or 9 year packages.",
@@ -176,6 +205,7 @@ export const businessConfig = {
       slug: "mobile-detailing",
       name: "Mobile Detailing",
       category: "mobile",
+      image: "",
       shortDescription: "We bring the detail to your driveway.",
       longDescription:
         "Full detailing services delivered to your home or workplace. Our self-contained mobile unit carries its own water and power, so all we need is a parking spot.",
