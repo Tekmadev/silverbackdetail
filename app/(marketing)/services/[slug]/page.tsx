@@ -73,6 +73,7 @@ export default async function ServiceDetailPage({
 
   const faqs = serviceFaqs(slug);
   const related = businessConfig.services.filter((s) => s.slug !== slug).slice(0, 3);
+  const gallery = service.gallery as ReadonlyArray<{ src: string; caption: string }>;
 
   return (
     <>
@@ -160,6 +161,30 @@ export default async function ServiceDetailPage({
                       </li>
                     ))}
                   </ul>
+                </>
+              )}
+
+              {gallery.length > 0 && (
+                <>
+                  <h2 className="mt-12 font-display text-2xl font-semibold text-bone">See it in action</h2>
+                  <div className={`mt-5 grid gap-4 ${gallery.length > 1 ? "sm:grid-cols-2" : ""}`}>
+                    {gallery.map((g) => (
+                      <figure key={g.src}>
+                        <div className="relative aspect-[3/2] overflow-hidden rounded-xl border border-line">
+                          <Image
+                            src={g.src}
+                            alt={g.caption || `${service.name} example`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 640px"
+                            className="object-cover"
+                          />
+                        </div>
+                        {g.caption && (
+                          <figcaption className="mt-2.5 text-sm leading-relaxed text-bone-muted">{g.caption}</figcaption>
+                        )}
+                      </figure>
+                    ))}
+                  </div>
                 </>
               )}
 

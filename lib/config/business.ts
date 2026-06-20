@@ -77,6 +77,7 @@ export const businessConfig = {
       name: "Exterior Detail",
       category: "standard",
       image: "/images/services-detailing/exterior.jpg",
+      gallery: [],
       shortDescription: "Hand wash, decontamination, and protective wax.",
       longDescription:
         "Full exterior hand wash with foam pre-soak, iron decontamination, clay bar treatment, and a layer of premium carnauba wax or sealant for 3 to 6 months of protection.",
@@ -103,6 +104,7 @@ export const businessConfig = {
       name: "Interior Detail",
       category: "standard",
       image: "/images/services-detailing/interior.webp",
+      gallery: [],
       shortDescription: "Deep cleaning, conditioning, and odour neutralization.",
       longDescription:
         "Complete interior vacuum, steam clean, leather conditioning, plastic restoration, and ozone odour treatment that leaves the cabin feeling factory fresh.",
@@ -129,6 +131,7 @@ export const businessConfig = {
       name: "Headlight Restoration",
       category: "standard",
       image: "/images/services-detailing/headlight-restoration.webp",
+      gallery: [],
       shortDescription: "Cut through yellowed, hazy lenses for clear, safer headlights.",
       longDescription:
         "Oxidized headlights scatter light and dull the whole front of the car. We wet-sand, multi-stage machine polish, and seal each lens back to optical clarity, then lock it in with a UV-resistant coating so they stay clear far longer than a quick buff.",
@@ -154,6 +157,7 @@ export const businessConfig = {
       name: "Paint Correction",
       category: "premium",
       image: "/images/services-detailing/gloss-enhancer.webp",
+      gallery: [],
       shortDescription: "Restore your paint to better than new condition.",
       longDescription:
         "Multi-stage machine polishing to remove swirls, scratches, oxidation, and water spots. Includes paint depth measurement, masking, and a finishing polish for true mirror-clear gloss.",
@@ -180,6 +184,12 @@ export const businessConfig = {
       name: "Ceramic Coating",
       category: "premium",
       image: "/images/services-detailing/Ceramic-coating.webp",
+      gallery: [
+        {
+          src: "/images/services-detailing/ceramic-sealant-spray.jpg",
+          caption: "Hydrophobic in action: water beads up and sheets straight off a freshly coated panel.",
+        },
+      ],
       shortDescription: "Years of protection with a glass-like finish.",
       longDescription:
         "Professional ceramic coating application with paint correction prep. Hydrophobic, UV resistant, and chemically resistant. Choose from 2, 5, or 9 year packages.",
@@ -206,6 +216,7 @@ export const businessConfig = {
       name: "Mobile Detailing",
       category: "mobile",
       image: "",
+      gallery: [],
       shortDescription: "We bring the detail to your driveway.",
       longDescription:
         "Full detailing services delivered to your home or workplace. Our self-contained mobile unit carries its own water and power, so all we need is a parking spot.",
