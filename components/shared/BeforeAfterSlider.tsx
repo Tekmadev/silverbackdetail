@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { MoveHorizontal } from "lucide-react";
+import { useGSAP, gsap } from "@/lib/animations/gsap-setup";
 import { cn } from "@/lib/utils";
 
 /**
@@ -20,7 +21,32 @@ export function BeforeAfterSlider({
 }) {
   const [pos, setPos] = React.useState(50);
   const ref = React.useRef<HTMLDivElement>(null);
+  const knobRef = React.useRef<HTMLSpanElement>(null);
   const dragging = React.useRef(false);
+
+  // On first scroll into view, sweep the divider once to invite interaction,
+  // then hand full control back to the user. Skipped for reduced motion / no
+  // viewport, and aborted the moment the user grabs the handle.
+  useGSAP(
+    () => {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced || !window.innerWidth || !window.innerHeight) return;
+      const proxy = { p: 50 };
+      const apply = () => {
+        if (!dragging.current) setPos(proxy.p);
+      };
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: ref.current, start: "top 75%", once: true },
+      });
+      tl.to(proxy, { p: 62, duration: 0.4, ease: "power2.inOut", onUpdate: apply })
+        .to(proxy, { p: 38, duration: 0.45, ease: "power2.inOut", onUpdate: apply })
+        .to(proxy, { p: 50, duration: 0.4, ease: "power2.inOut", onUpdate: apply });
+      if (knobRef.current) {
+        tl.fromTo(knobRef.current, { scale: 1 }, { scale: 1.08, duration: 0.3, yoyo: true, repeat: 1 }, 0);
+      }
+    },
+    { scope: ref },
+  );
 
   const updateFromClientX = React.useCallback((clientX: number) => {
     const el = ref.current;
@@ -105,7 +131,10 @@ export function BeforeAfterSlider({
         className="absolute inset-y-0 z-10 flex w-0.5 cursor-ew-resize items-center justify-center bg-bone/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         style={{ left: `${pos}%`, transform: "translateX(-50%)" }}
       >
-        <span className="flex size-10 items-center justify-center rounded-full border border-line-strong bg-ink text-bone shadow-lg">
+        <span
+          ref={knobRef}
+          className="flex size-10 items-center justify-center rounded-full border border-line-strong bg-ink text-bone shadow-lg"
+        >
           <MoveHorizontal className="size-4" />
         </span>
       </div>

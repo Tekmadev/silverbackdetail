@@ -7,6 +7,7 @@ import { Phone } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
+import { Magnetic } from "@/components/animations/Magnetic";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { primaryNav } from "@/lib/config/nav";
 import { businessConfig } from "@/lib/config/business";
@@ -37,7 +38,14 @@ export function Header() {
       )}
     >
       <Container className="flex h-16 items-center justify-between md:h-18">
-        <Link href="/" aria-label={`${businessConfig.name} home`} className="rounded-md">
+        <Link
+          href="/"
+          aria-label={`${businessConfig.name} home`}
+          className={cn(
+            "origin-left rounded-md transition-transform duration-300",
+            solid && "scale-[0.94]",
+          )}
+        >
           <Logo />
         </Link>
 
@@ -50,11 +58,18 @@ export function Header() {
                 href={link.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "rounded-md px-3.5 py-2 text-sm font-medium transition-colors",
+                  "group relative rounded-md px-3.5 py-2 text-sm font-medium transition-colors",
                   active ? "text-bone" : "text-bone-muted hover:text-bone",
                 )}
               >
                 {link.label}
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute inset-x-3.5 bottom-1 h-px origin-left bg-silver transition-transform duration-200",
+                    active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+                  )}
+                />
               </Link>
             );
           })}
@@ -68,9 +83,11 @@ export function Header() {
             <Phone className="size-4" />
             {businessConfig.contact.phoneDisplay}
           </a>
-          <Button asChild size="sm" className="hidden sm:inline-flex">
-            <Link href="/book">Book now</Link>
-          </Button>
+          <Magnetic className="hidden sm:inline-flex">
+            <Button asChild size="sm">
+              <Link href="/book">Book now</Link>
+            </Button>
+          </Magnetic>
           <MobileNav />
         </div>
       </Container>

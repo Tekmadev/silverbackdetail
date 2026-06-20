@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useGSAP, gsap } from "@/lib/animations/gsap-setup";
+import { sheenSweep } from "@/lib/animations/useSheenSweep";
 import { Container } from "@/components/shared/Container";
 import { businessConfig } from "@/lib/config/business";
 
@@ -17,12 +18,16 @@ const stats: Stat[] = [
 export function StatsCounter() {
   const ref = React.useRef<HTMLDivElement>(null);
   const numRefs = React.useRef<Array<HTMLSpanElement | null>>([]);
+  const cellRefs = React.useRef<Array<HTMLDivElement | null>>([]);
 
   useGSAP(
     () => {
       const reduced =
         typeof window !== "undefined" &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const hasViewport =
+        typeof window !== "undefined" && !!window.innerWidth && !!window.innerHeight;
+      const animate = !reduced && hasViewport;
 
       const format = (v: number, s: Stat) =>
         `${s.prefix ?? ""}${v.toLocaleString("en-CA", {
@@ -30,10 +35,23 @@ export function StatsCounter() {
           maximumFractionDigits: s.decimals,
         })}${s.suffix ?? ""}`;
 
+      // Cells fade + rise in, left to right, on the same trigger as the count.
+      if (animate) {
+        gsap.from(cellRefs.current.filter(Boolean), {
+          opacity: 0,
+          y: 16,
+          duration: 0.5,
+          ease: "power2.out",
+          stagger: 0.05,
+          scrollTrigger: { trigger: ref.current, start: "top 80%", once: true },
+        });
+      }
+
+      const lastIndex = numRefs.current.length - 1;
       numRefs.current.forEach((el, i) => {
         if (!el) return;
         const s = stats[i];
-        if (reduced) {
+        if (!animate) {
           el.textContent = format(s.value, s);
           return;
         }
@@ -46,6 +64,10 @@ export function StatsCounter() {
           onUpdate: () => {
             el.textContent = format(obj.v, s);
           },
+          onComplete:
+            i === lastIndex
+              ? () => numRefs.current.forEach((n) => sheenSweep(n))
+              : undefined,
         });
       });
     },
@@ -57,12 +79,18 @@ export function StatsCounter() {
       <Container>
         <div ref={ref} className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {stats.map((s, i) => (
-            <div key={s.label} className="flex flex-col items-center text-center md:items-start md:text-left">
+            <div
+              key={s.label}
+              ref={(el) => {
+                cellRefs.current[i] = el;
+              }}
+              className="flex flex-col items-center text-center md:items-start md:text-left"
+            >
               <span
                 ref={(el) => {
                   numRefs.current[i] = el;
                 }}
-                className="font-display text-4xl font-semibold tracking-tight text-bone tabular-nums sm:text-5xl"
+                className="text-metal font-display text-4xl font-semibold tracking-tight tabular-nums sm:text-5xl"
               >
                 {s.prefix ?? ""}
                 {s.value.toLocaleString("en-CA", {

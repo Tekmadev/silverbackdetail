@@ -1,4 +1,9 @@
+"use client";
+
+import * as React from "react";
 import { Star, Quote } from "lucide-react";
+import { useLenis } from "lenis/react";
+import { useGSAP, gsap } from "@/lib/animations/gsap-setup";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { testimonials, type Testimonial } from "@/lib/data/content";
@@ -27,8 +32,53 @@ function Card({ t }: { t: Testimonial }) {
 }
 
 export function TestimonialMarquee() {
-  // Duplicate the list so the marquee loops seamlessly.
+  // Duplicate the list so the marquee loops seamlessly (xPercent -50 = one set).
   const loop = [...testimonials, ...testimonials];
+  const trackRef = React.useRef<HTMLDivElement>(null);
+  const tweenRef = React.useRef<gsap.core.Tween | null>(null);
+  const hovered = React.useRef(false);
+  const lenis = useLenis();
+
+  useGSAP(
+    () => {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const hasViewport = !!window.innerWidth && !!window.innerHeight;
+      if (reduced || !hasViewport || !trackRef.current) return; // static, readable
+
+      const tween = gsap.to(trackRef.current, {
+        xPercent: -50,
+        duration: 40,
+        ease: "none",
+        repeat: -1,
+      });
+      tweenRef.current = tween;
+
+      // Scroll velocity speeds the marquee up; it eases back to 1x when idle, and
+      // smoothly stops on hover. timeScale (not animation-duration) means no jank.
+      let cur = 1;
+      let target = 1;
+      const tick = () => {
+        target += (1 - target) * 0.05; // decay toward base speed
+        const effective = hovered.current ? 0 : target;
+        cur += (effective - cur) * 0.1;
+        tween.timeScale(cur);
+      };
+      gsap.ticker.add(tick);
+
+      const onScroll = () => {
+        const v = Math.min(Math.abs(lenis?.velocity ?? 0) / 8, 1.2);
+        target = 1 + v;
+      };
+      lenis?.on("scroll", onScroll);
+
+      return () => {
+        gsap.ticker.remove(tick);
+        lenis?.off("scroll", onScroll);
+      };
+    },
+    { dependencies: [lenis] },
+  );
+
   return (
     <section id="reviews" className="relative overflow-hidden py-24 md:py-32">
       <Container>
@@ -41,11 +91,20 @@ export function TestimonialMarquee() {
         />
       </Container>
 
-      <div className="group relative mt-14 flex flex-col gap-6">
+      <div className="relative mt-14 flex flex-col gap-6">
         {/* edge fades */}
         <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-ink to-transparent" />
         <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-ink to-transparent" />
-        <div className="flex w-max gap-6 pl-6 animate-marquee group-hover:[animation-play-state:paused]">
+        <div
+          ref={trackRef}
+          className="flex w-max gap-6 pl-6"
+          onPointerEnter={() => {
+            hovered.current = true;
+          }}
+          onPointerLeave={() => {
+            hovered.current = false;
+          }}
+        >
           {loop.map((t, i) => (
             <Card key={`${t.name}-${i}`} t={t} />
           ))}

@@ -38,7 +38,7 @@ export function FadeUp({
   if (stagger) {
     const container: Variants = {
       hidden: {},
-      visible: { transition: { staggerChildren: 0.08, delayChildren: delay } },
+      visible: { transition: { staggerChildren: 0.05, delayChildren: delay } },
     };
     return (
       <MotionTag
@@ -67,8 +67,8 @@ export function FadeUp({
 }
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 18 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } },
+  hidden: { opacity: 0, y: 14, scale: 0.985 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.55, ease: EASE } },
 };
 
 export function FadeUpItem({
