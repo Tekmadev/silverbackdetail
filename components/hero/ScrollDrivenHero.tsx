@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useReducedMotion } from "motion/react";
@@ -295,10 +296,18 @@ function HeroBackground({
         <div className="absolute inset-x-0 top-[62%] h-px bg-gradient-to-r from-transparent via-silver/30 to-transparent" />
       </div>
 
-      {/* Poster base: guarantees a strong, on-brand image even if the video never
-          plays (Low Power Mode, slow network, decode failure). */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={HERO_POSTER} alt="" aria-hidden className="absolute inset-0 size-full object-cover" />
+      {/* Poster base: LCP element — priority + fill ensures fetchpriority="high" and
+          an automatic <link rel="preload"> in <head> for immediate visibility. */}
+      <div className="absolute inset-0">
+        <Image
+          src={HERO_POSTER}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+      </div>
 
       <video
         ref={(node) => {
@@ -316,7 +325,9 @@ function HeroBackground({
         muted
         loop={autoplay}
         autoPlay={autoplay}
-        preload="auto"
+        // scrub path: browser should not pre-buffer; JS controls currentTime via RAF.
+        // autoplay path: metadata only — poster loads first, video buffers as it plays.
+        preload={autoplay ? "metadata" : "none"}
         onLoadedMetadata={autoplay ? undefined : reveal}
         onLoadedData={autoplay ? undefined : reveal}
         onCanPlay={autoplay ? undefined : reveal}

@@ -6,7 +6,7 @@ import { isSlotAvailable } from "@/lib/booking/availability";
 import { generateBookingId, encodeBooking, decodeBooking } from "@/lib/booking/token";
 import type { BookingRecord, CreateBookingResult } from "@/lib/booking/types";
 import { getServiceBySlug, absoluteUrl } from "@/lib/config/site";
-import { saveBooking, getBookingById, updateBooking } from "@/lib/storage/bookings";
+import { saveBooking, getBookingById, updateBooking, isSlotDoubleBooked } from "@/lib/storage/bookings";
 import { sendBookingEmails, sendRefundEmail, sendContactEmail } from "@/lib/email/send";
 import { getStripe, isStripeConfigured } from "@/lib/stripe/client";
 
@@ -22,6 +22,10 @@ export async function createBooking(input: BookingInput): Promise<CreateBookingR
   if (data.company) return { ok: false, error: "Submission rejected." };
 
   if (!isSlotAvailable(data.date, data.time)) {
+    return { ok: false, error: "That time is no longer available. Please pick another slot." };
+  }
+
+  if (await isSlotDoubleBooked(data.date, data.time)) {
     return { ok: false, error: "That time is no longer available. Please pick another slot." };
   }
 
