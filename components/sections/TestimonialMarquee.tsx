@@ -7,7 +7,6 @@ import { useGSAP, gsap } from "@/lib/animations/gsap-setup";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { testimonials, type Testimonial } from "@/lib/data/content";
-import { businessConfig } from "@/lib/config/business";
 
 function Card({ t }: { t: Testimonial }) {
   return (
@@ -79,12 +78,15 @@ export function TestimonialMarquee() {
     { dependencies: [lenis] },
   );
 
+  // No invented reviews: render nothing until real testimonials are added.
+  if (testimonials.length === 0) return null;
+
   return (
     <section id="reviews" className="relative overflow-hidden py-24 md:py-32">
       <Container>
         <SectionHeading
           align="center"
-          eyebrow={`${businessConfig.trust.googleRating.toFixed(1)} rating · ${businessConfig.trust.reviewCount} reviews`}
+          eyebrow="What clients say"
           title="Trusted across the region"
           description="Owners who care about their vehicles keep coming back. Here is what they say."
           className="mx-auto"

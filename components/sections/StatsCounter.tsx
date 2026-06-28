@@ -8,11 +8,12 @@ import { businessConfig } from "@/lib/config/business";
 
 type Stat = { value: number; decimals: number; prefix?: string; suffix?: string; label: string };
 
+// Verifiable facts only. No fabricated review or car counts until they are real.
 const stats: Stat[] = [
-  { value: businessConfig.trust.carsDetailed, decimals: 0, suffix: "+", label: "Cars detailed" },
-  { value: businessConfig.trust.googleRating, decimals: 1, label: "Average rating" },
-  { value: businessConfig.trust.reviewCount, decimals: 0, suffix: "+", label: "Five-star reviews" },
+  { value: businessConfig.services.length, decimals: 0, label: "Signature services" },
   { value: businessConfig.serviceAreas.length, decimals: 0, label: "Cities served" },
+  { value: 9, decimals: 0, suffix: "-yr", label: "Max coating life" },
+  { value: 7, decimals: 0, label: "Days open weekly" },
 ];
 
 export function StatsCounter() {

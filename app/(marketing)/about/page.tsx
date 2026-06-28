@@ -14,18 +14,18 @@ import { businessConfig } from "@/lib/config/business";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Silverback Detailing is a premium, certified detailing studio in Hamilton, Ontario. Meet the craftsmanship, philosophy, and credentials behind the finish.",
+    "Silverback Detailing is a premium detailing studio in Hamilton, Ontario. Meet the craftsmanship, philosophy, and process behind the finish.",
   alternates: { canonical: "/about" },
 };
 
 const values = [
   { icon: Target, title: "Precision over speed", text: "We measure, mask, and refine. A finish is only finished when it holds up under scrutiny." },
   { icon: ShieldCheck, title: "Protection that lasts", text: "We use coatings and sealants rated in years, and we tell you exactly how to keep them." },
-  { icon: Award, title: "Certified standards", text: `${businessConfig.trust.certifications.join(" and ")}, trained to manufacturer specifications.` },
+  { icon: Award, title: "Standards that hold up", text: "Professional-grade products applied to manufacturer specifications, and backed by clear aftercare." },
 ];
 
 export default function AboutPage() {
-  const { foundedYear, address, trust } = businessConfig;
+  const { foundedYear, address } = businessConfig;
   return (
     <>
       <JsonLd
@@ -78,12 +78,12 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <p className="mt-5 text-sm leading-relaxed text-bone-muted">
-                  Our detailers are {trust.certifications.join(" and ")}, with hands-on training in machine polishing
+                  Our detailers work to manufacturer specifications, with hands-on training in machine polishing
                   and professional ceramic coating application. We treat every booking as a craft project, not a
                   conveyor belt.
                 </p>
                 <ul className="mt-5 flex flex-wrap gap-2">
-                  {trust.certifications.map((c) => (
+                  {["Paint correction", "Ceramic coating", "Interior detailing", "Headlight restoration"].map((c) => (
                     <li key={c} className="rounded-full border border-line bg-ink px-3 py-1 text-xs text-silver">
                       {c}
                     </li>

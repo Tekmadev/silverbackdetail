@@ -13,10 +13,10 @@ const logoData = readFileSync(join(process.cwd(), "public/images/logo/silverback
 const logoSrc = `data:image/png;base64,${logoData.toString("base64")}`;
 
 export default function OpengraphImage() {
-  const { name, tagline, address, trust } = businessConfig;
+  const { name, tagline, address } = businessConfig;
   const locationLine = `Premium car detailing · ${address.city}, ${address.provinceCode}`;
-  const ratingLine = `${trust.googleRating.toFixed(1)} rating · ${trust.reviewCount}+ reviews`;
-  const servicesLine = "Paint correction · Ceramic coating · Mobile";
+  const servicesLine = "Paint correction · Ceramic coating · Detailing";
+  const deliveryLine = "In-shop & mobile · Open 7 days";
 
   return new ImageResponse(
     (
@@ -47,9 +47,9 @@ export default function OpengraphImage() {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 24, fontSize: 26, color: "#c7cad1" }}>
-          <div style={{ display: "flex" }}>{ratingLine}</div>
-          <div style={{ display: "flex", color: "#33333a" }}>/</div>
           <div style={{ display: "flex" }}>{servicesLine}</div>
+          <div style={{ display: "flex", color: "#33333a" }}>/</div>
+          <div style={{ display: "flex" }}>{deliveryLine}</div>
         </div>
       </div>
     ),

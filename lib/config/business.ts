@@ -5,8 +5,9 @@
  * Changing a phone number, price, or service is a single edit here. Never hardcode
  * any of this data anywhere else in the codebase.
  *
- * The phone number and email below are the real business contact details. The
- * address and social handles are still placeholders; replace them before launch.
+ * Phone, email, address, hours, and all social links below are the real business
+ * details (Instagram, Facebook, WhatsApp, Google). WhatsApp uses the business
+ * number in wa.me format.
  */
 
 export const businessConfig = {
@@ -30,34 +31,35 @@ export const businessConfig = {
 
   // Physical address
   address: {
-    street: "120 Sherman Avenue North",
+    street: "981 Main Street West",
     city: "Hamilton",
     province: "Ontario",
     provinceCode: "ON",
-    postalCode: "L8L 6N4",
+    postalCode: "L8S 1A8",
     country: "Canada",
     countryCode: "CA",
-    coordinates: { lat: 43.2557, lng: -79.8711 },
-    googleMapsUrl: "https://maps.google.com/?q=Silverback+Detailing+Hamilton+Ontario",
+    coordinates: { lat: 43.25778, lng: -79.90484 },
+    googleMapsUrl: "https://maps.google.com/?q=981+Main+Street+West+Hamilton+Ontario",
   },
 
   // Operating hours (24h format)
   hours: {
-    monday: { open: "08:00", close: "18:00", closed: false },
-    tuesday: { open: "08:00", close: "18:00", closed: false },
-    wednesday: { open: "08:00", close: "18:00", closed: false },
-    thursday: { open: "08:00", close: "18:00", closed: false },
-    friday: { open: "08:00", close: "18:00", closed: false },
-    saturday: { open: "09:00", close: "17:00", closed: false },
-    sunday: { open: "00:00", close: "00:00", closed: true },
+    monday: { open: "10:00", close: "21:00", closed: false },
+    tuesday: { open: "10:00", close: "21:00", closed: false },
+    wednesday: { open: "10:00", close: "21:00", closed: false },
+    thursday: { open: "10:00", close: "21:00", closed: false },
+    friday: { open: "10:00", close: "21:00", closed: false },
+    saturday: { open: "10:00", close: "21:00", closed: false },
+    sunday: { open: "10:00", close: "21:00", closed: false },
   },
 
   // Social
   social: {
-    instagram: { handle: "@silverbackdetailing", url: "https://instagram.com/silverbackdetailing" },
-    facebook: { handle: "silverbackdetailing", url: "https://facebook.com/silverbackdetailing" },
-    tiktok: { handle: "@silverbackdetailing", url: "https://tiktok.com/@silverbackdetailing" },
-    google: { url: "https://g.page/silverbackdetailing" },
+    instagram: { handle: "@silverbackautodetailing", url: "https://www.instagram.com/silverbackautodetailing" },
+    facebook: { handle: "Silverback Auto Detailing", url: "https://www.facebook.com/profile.php?id=61591317153492" },
+    // WhatsApp uses the business phone number in wa.me format (digits only, no +).
+    whatsapp: { display: "(905) 519-6290", url: "https://wa.me/19055196290" },
+    google: { url: "https://share.google/EGvtHS8ocuoZDqKjK" },
   },
 
   // Service area
@@ -227,7 +229,7 @@ export const businessConfig = {
     depositExplanation:
       "Premium services require a refundable deposit to secure your slot. The deposit is fully credited toward your final invoice on the day of service.",
     // Available appointment start times (local), filtered against operating hours.
-    dailySlots: ["08:00", "10:00", "12:00", "14:00", "16:00"],
+    dailySlots: ["10:00", "12:00", "14:00", "16:00", "18:00"],
   },
 
   // SEO
@@ -251,14 +253,10 @@ export const businessConfig = {
     locale: "en_CA",
   },
 
-  // Trust signals
-  trust: {
-    yearsInBusiness: 1,
-    carsDetailed: 500,
-    googleRating: 5.0,
-    reviewCount: 47,
-    certifications: ["Gtechniq Accredited", "IDA Certified"],
-  },
+  // Trust signals were removed until they can be backed by verifiable data:
+  // Google rating, review count, cars-detailed count, and certifications. When
+  // real numbers exist, add a `trust` object back here and re-wire the consumers
+  // (StatsCounter, TrustBadges, Footer, schema aggregateRating, about page).
 
   // Media
   media: {

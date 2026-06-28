@@ -9,9 +9,10 @@ import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/animations/Magnetic";
 import { MobileNav } from "@/components/layout/MobileNav";
+import { WhatsAppIcon } from "@/components/shared/SocialIcons";
 import { primaryNav } from "@/lib/config/nav";
 import { businessConfig } from "@/lib/config/business";
-import { formatPhoneForLink } from "@/lib/config/site";
+import { formatPhoneForLink, getWhatsAppLink } from "@/lib/config/site";
 import { cn } from "@/lib/utils";
 
 export function Header() {
@@ -83,9 +84,15 @@ export function Header() {
             <Phone className="size-4" />
             {businessConfig.contact.phoneDisplay}
           </a>
+          <Button asChild size="sm" variant="ghost" className="hidden lg:inline-flex">
+            <Link href="/book">Book</Link>
+          </Button>
           <Magnetic className="hidden sm:inline-flex">
             <Button asChild size="sm">
-              <Link href="/book">Book now</Link>
+              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon className="size-4" />
+                Message us
+              </a>
             </Button>
           </Magnetic>
           <MobileNav />

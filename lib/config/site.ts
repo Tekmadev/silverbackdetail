@@ -47,6 +47,22 @@ export function formatEmailForLink(email: string): string {
   return `mailto:${email}`;
 }
 
+/**
+ * Pre-filled WhatsApp deep link to the business number. Opens a chat with the
+ * message ready to send (works on mobile app and WhatsApp Web on desktop).
+ */
+export function getWhatsAppLink(
+  message = "Hi Silverback Detailing! I'd like a quote for detailing my vehicle.",
+): string {
+  return `${businessConfig.social.whatsapp.url}?text=${encodeURIComponent(message)}`;
+}
+
+/** Instagram DM deep link. ig.me/m/<username> opens the chat on app and web. */
+export function getInstagramDmLink(): string {
+  const username = businessConfig.social.instagram.handle.replace(/^@/, "");
+  return `https://ig.me/m/${username}`;
+}
+
 export function formatPrice(amount: number, currency = "CAD"): string {
   return new Intl.NumberFormat("en-CA", {
     style: "currency",

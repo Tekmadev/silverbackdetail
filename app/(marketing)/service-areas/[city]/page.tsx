@@ -80,14 +80,14 @@ export default async function ServiceAreaPage({
               <h2>Why {area.name} drivers choose Silverback</h2>
               <p>
                 Whether you commute daily or keep a weekend showpiece, {area.name} roads are hard on paint and
-                interiors. We bring a disciplined, certified process that protects your vehicle and keeps it looking its
+                interiors. We bring a disciplined, methodical process that protects your vehicle and keeps it looking its
                 best for the long run.
               </p>
               <ul>
                 <li>Mobile detailing available across {area.name}</li>
-                <li>{businessConfig.trust.certifications.join(" and ")}</li>
+                <li>Professional-grade products and a proven, methodical process</li>
                 <li>Refundable deposits on paint correction and ceramic coating</li>
-                <li>{businessConfig.trust.googleRating.toFixed(1)} star rating from {businessConfig.trust.reviewCount}+ reviews</li>
+                <li>Transparent starting prices with a clear scope</li>
               </ul>
             </div>
             <div className="rounded-xl border border-line bg-ink-3 p-7">

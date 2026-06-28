@@ -78,7 +78,7 @@ export default function RootLayout({
         url: seo.siteUrl,
         email: contact.email,
         telephone: contact.phone,
-        sameAs: [social.instagram.url, social.facebook.url, social.tiktok.url, social.google.url],
+        sameAs: [social.instagram.url, social.facebook.url, social.google.url],
       },
       {
         "@type": "WebSite",

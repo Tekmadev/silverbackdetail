@@ -21,7 +21,7 @@ export async function GET() {
     ),
     `- [Mobile Detailing](${absoluteUrl("/mobile-detailing")}): Mobile car detailing brought to your home or workplace.`,
     `- [Gallery](${absoluteUrl("/gallery")}): Before and after detailing and correction work.`,
-    `- [About](${absoluteUrl("/about")}): Brand story, philosophy, and certifications.`,
+    `- [About](${absoluteUrl("/about")}): Brand story, philosophy, and process.`,
     `- [FAQ](${absoluteUrl("/faq")}): Answers about pricing, deposits, coatings, and process.`,
     `- [Contact](${absoluteUrl("/contact")}): Phone, email, hours, and location.`,
     `- [Book](${absoluteUrl("/book")}): Online booking for all services.`,

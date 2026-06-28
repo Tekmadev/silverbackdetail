@@ -7,7 +7,7 @@ import { businessConfig, type Service } from "@/lib/config/business";
 import { absoluteUrl, getOpeningHoursSpecification, formatPrice } from "@/lib/config/site";
 import type { Faq } from "@/lib/data/content";
 
-const { name, legalName, address, contact, trust, seo, serviceAreas } = businessConfig;
+const { name, legalName, address, contact, seo, serviceAreas } = businessConfig;
 
 export function getLocalBusinessSchema(): Record<string, unknown> {
   return {
@@ -39,13 +39,6 @@ export function getLocalBusinessSchema(): Record<string, unknown> {
     },
     areaServed: serviceAreas.map((a) => ({ "@type": "City", name: a.name })),
     openingHoursSpecification: getOpeningHoursSpecification(),
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: trust.googleRating,
-      reviewCount: trust.reviewCount,
-      bestRating: 5,
-      worstRating: 1,
-    },
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Detailing services",

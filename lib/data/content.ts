@@ -4,8 +4,6 @@
  * so it can be edited without touching layout code.
  */
 
-import { businessConfig } from "@/lib/config/business";
-
 export type Testimonial = {
   name: string;
   location: string;
@@ -15,62 +13,10 @@ export type Testimonial = {
   quote: string;
 };
 
-export const testimonials: Testimonial[] = [
-  {
-    name: "Marcus Bell",
-    location: "Ancaster, ON",
-    vehicle: "BMW M4 Competition",
-    service: "Ceramic Coating",
-    rating: 5,
-    quote:
-      "The depth of the finish is unreal. Water beads and rolls straight off, and after six months it still looks like the day I picked it up. Worth every dollar.",
-  },
-  {
-    name: "Priya Sharma",
-    location: "Burlington, ON",
-    vehicle: "Audi Q5",
-    service: "Interior Detail",
-    rating: 5,
-    quote:
-      "Two kids and a dog had destroyed our interior. They brought it back to better than new. It honestly smelled like a brand new car when I got in.",
-  },
-  {
-    name: "Dave Thompson",
-    location: "Hamilton, ON",
-    vehicle: "Ford F-150",
-    service: "Paint Correction",
-    rating: 5,
-    quote:
-      "Years of swirl marks gone in a single visit. The before and after under their lights was night and day. These guys are genuine craftsmen.",
-  },
-  {
-    name: "Elena Rossi",
-    location: "Stoney Creek, ON",
-    vehicle: "Tesla Model 3",
-    service: "Mobile Detailing",
-    rating: 5,
-    quote:
-      "They came to my driveway and I never had to leave the house. Professional, on time, and the car looked showroom ready when they left.",
-  },
-  {
-    name: "Jordan Lee",
-    location: "Dundas, ON",
-    vehicle: "Porsche 911",
-    service: "Ceramic Coating",
-    rating: 5,
-    quote:
-      "I am extremely particular about my car and they exceeded my expectations. The attention to the smallest details is what sets Silverback apart.",
-  },
-  {
-    name: "Aisha Khan",
-    location: "Waterdown, ON",
-    vehicle: "Honda CR-V",
-    service: "Exterior Detail",
-    rating: 5,
-    quote:
-      "Booked online in two minutes, dropped it off, and picked up a car that looked five years younger. I will not take my vehicle anywhere else.",
-  },
-];
+// Real customer testimonials go here once collected (for example, pulled from
+// the Google Business Profile). Intentionally empty: no invented reviews. The
+// TestimonialMarquee section auto-hides while this list is empty.
+export const testimonials: Testimonial[] = [];
 
 export type WhyUsPoint = {
   title: string;
@@ -80,8 +26,9 @@ export type WhyUsPoint = {
 
 export const whyUs: WhyUsPoint[] = [
   {
-    title: "Certified craftsmanship",
-    description: `${businessConfig.trust.certifications.join(" and ")}. Trained to manufacturer standards on every coating we apply.`,
+    title: "Meticulous craftsmanship",
+    description:
+      "A disciplined, multi-stage process with professional-grade products, applied to manufacturer standards on every coating.",
     icon: "award",
   },
   {

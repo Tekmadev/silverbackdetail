@@ -13,9 +13,10 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/shared/Logo";
+import { WhatsAppIcon, InstagramIcon } from "@/components/shared/SocialIcons";
 import { primaryNav } from "@/lib/config/nav";
 import { businessConfig } from "@/lib/config/business";
-import { formatPhoneForLink } from "@/lib/config/site";
+import { formatPhoneForLink, getWhatsAppLink, getInstagramDmLink } from "@/lib/config/site";
 import { cn } from "@/lib/utils";
 
 export function MobileNav() {
@@ -61,15 +62,29 @@ export function MobileNav() {
           </nav>
           <div className="space-y-3 border-t border-line p-6">
             <Button asChild className="w-full" size="lg">
-              <Link href="/book">Book your detail</Link>
+              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+                <WhatsAppIcon className="size-4" />
+                Message on WhatsApp
+              </a>
             </Button>
-            <a
-              href={formatPhoneForLink()}
-              className="flex items-center justify-center gap-2 text-sm font-medium text-bone-muted transition-colors hover:text-bone"
-            >
-              <Phone className="size-4" />
-              {businessConfig.contact.phoneDisplay}
-            </a>
+            <Button asChild variant="secondary" className="w-full" size="lg">
+              <a href={getInstagramDmLink()} target="_blank" rel="noopener noreferrer">
+                <InstagramIcon className="size-4" />
+                DM on Instagram
+              </a>
+            </Button>
+            <div className="flex items-center justify-between gap-3 pt-1 text-sm font-medium text-bone-muted">
+              <Link href="/book" className="transition-colors hover:text-bone">
+                Or book online
+              </Link>
+              <a
+                href={formatPhoneForLink()}
+                className="flex items-center gap-2 transition-colors hover:text-bone"
+              >
+                <Phone className="size-4" />
+                {businessConfig.contact.phoneDisplay}
+              </a>
+            </div>
           </div>
         </div>
       </DialogContent>

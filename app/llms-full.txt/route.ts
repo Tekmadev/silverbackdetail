@@ -5,7 +5,7 @@ import { faqs, processSteps } from "@/lib/data/content";
 export const revalidate = 86400;
 
 export async function GET() {
-  const { name, legalName, contact, address, services, serviceAreas, trust, booking } = businessConfig;
+  const { name, legalName, contact, address, services, serviceAreas, booking } = businessConfig;
   const hours = getWeeklyHours();
 
   const out: string[] = [];
@@ -18,8 +18,6 @@ export async function GET() {
   out.push(`- Location: ${address.street}, ${address.city}, ${address.province} ${address.postalCode}, ${address.country}`);
   out.push(`- Phone: ${contact.phoneDisplay}`);
   out.push(`- Email: ${contact.email}`);
-  out.push(`- Rating: ${trust.googleRating.toFixed(1)} from ${trust.reviewCount}+ reviews`);
-  out.push(`- Certifications: ${trust.certifications.join(", ")}`);
   out.push(`- Founded: ${businessConfig.foundedYear}`);
   out.push("");
   out.push("## Hours");

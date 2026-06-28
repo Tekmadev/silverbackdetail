@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin, Star } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { Logo } from "@/components/shared/Logo";
-import { InstagramIcon, FacebookIcon, TikTokIcon } from "@/components/shared/SocialIcons";
+import { InstagramIcon, FacebookIcon } from "@/components/shared/SocialIcons";
 import { businessConfig } from "@/lib/config/business";
 import { legalNav } from "@/lib/config/nav";
 import {
@@ -12,7 +12,7 @@ import {
 } from "@/lib/config/site";
 
 export function Footer() {
-  const { contact, address, social, services, serviceAreas, trust, name, tagline } = businessConfig;
+  const { contact, address, social, services, serviceAreas, name, tagline } = businessConfig;
   const year = new Date().getFullYear();
   const status = getOpenStatus();
 
@@ -25,11 +25,6 @@ export function Footer() {
           <div className="space-y-5">
             <Logo size={32} />
             <p className="max-w-xs text-sm leading-relaxed text-bone-muted">{businessConfig.longDescription}</p>
-            <div className="flex items-center gap-1.5 text-sm text-bone">
-              <Star className="size-4 fill-warning text-warning" />
-              <span className="font-medium">{trust.googleRating.toFixed(1)}</span>
-              <span className="text-bone-muted">· {trust.reviewCount} Google reviews</span>
-            </div>
             <div className="flex items-center gap-3 pt-1">
               <Link
                 href={social.instagram.url}
@@ -44,13 +39,6 @@ export function Footer() {
                 className="rounded-md p-1.5 text-bone-muted transition-colors hover:text-bone"
               >
                 <FacebookIcon className="size-5" />
-              </Link>
-              <Link
-                href={social.tiktok.url}
-                aria-label="TikTok"
-                className="rounded-md p-1.5 text-bone-muted transition-colors hover:text-bone"
-              >
-                <TikTokIcon className="size-5" />
               </Link>
             </div>
           </div>
