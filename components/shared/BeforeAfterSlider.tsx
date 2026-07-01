@@ -1,24 +1,30 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { MoveHorizontal } from "lucide-react";
 import { useGSAP, gsap } from "@/lib/animations/gsap-setup";
 import { cn } from "@/lib/utils";
 
 /**
  * Drag (or keyboard) to compare a dull "before" against a glossy "after".
- * Until real photography is added, both sides are rendered as tasteful CSS
- * panels keyed off `hue`. Swap in <img>/next/image when assets are ready.
+ * Pass real photography via `beforeSrc`/`afterSrc`; without them, both sides
+ * fall back to tasteful CSS panels keyed off `hue`.
  */
 export function BeforeAfterSlider({
   hue = 220,
   label,
+  beforeSrc,
+  afterSrc,
   className,
 }: {
   hue?: number;
   label?: string;
+  beforeSrc?: string;
+  afterSrc?: string;
   className?: string;
 }) {
+  const hasImages = Boolean(beforeSrc && afterSrc);
   const [pos, setPos] = React.useState(50);
   const ref = React.useRef<HTMLDivElement>(null);
   const knobRef = React.useRef<HTMLSpanElement>(null);
@@ -94,26 +100,54 @@ export function BeforeAfterSlider({
       {/* After (glossy) */}
       <div
         className="absolute inset-0"
-        style={{
-          background: `radial-gradient(120% 100% at 30% 0%, hsl(${hue} 35% 28%), hsl(${hue} 40% 8%) 70%)`,
-        }}
+        style={
+          hasImages
+            ? undefined
+            : {
+                background: `radial-gradient(120% 100% at 30% 0%, hsl(${hue} 35% 28%), hsl(${hue} 40% 8%) 70%)`,
+              }
+        }
       >
-        <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(255,255,255,0.18)_0%,transparent_30%,transparent_60%,rgba(255,255,255,0.1)_100%)]" />
-        <span className="absolute bottom-4 right-4 rounded-full border border-line-strong bg-ink/60 px-3 py-1 text-xs font-medium text-bone backdrop-blur">
+        {hasImages ? (
+          <Image
+            src={afterSrc as string}
+            alt={label ? `${label} — after` : "After detailing"}
+            fill
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(255,255,255,0.18)_0%,transparent_30%,transparent_60%,rgba(255,255,255,0.1)_100%)]" />
+        )}
+        <span className="absolute bottom-4 right-4 z-10 rounded-full border border-line-strong bg-ink/60 px-3 py-1 text-xs font-medium text-bone backdrop-blur">
           After
         </span>
       </div>
 
-      {/* Before (dull, swirled) — clipped to the left of the handle */}
+      {/* Before — clipped to the left of the handle */}
       <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
         <div
           className="absolute inset-0"
-          style={{
-            background: `linear-gradient(160deg, hsl(${hue} 8% 22%), hsl(${hue} 6% 12%))`,
-          }}
+          style={
+            hasImages
+              ? undefined
+              : {
+                  background: `linear-gradient(160deg, hsl(${hue} 8% 22%), hsl(${hue} 6% 12%))`,
+                }
+          }
         >
-          <div className="absolute inset-0 opacity-50 bg-[repeating-radial-gradient(circle_at_40%_40%,rgba(255,255,255,0.05)_0,rgba(255,255,255,0.05)_1px,transparent_2px,transparent_5px)]" />
-          <span className="absolute bottom-4 left-4 rounded-full border border-line bg-ink/60 px-3 py-1 text-xs font-medium text-bone-muted backdrop-blur">
+          {hasImages ? (
+            <Image
+              src={beforeSrc as string}
+              alt={label ? `${label} — before` : "Before detailing"}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover"
+            />
+          ) : (
+            <div className="absolute inset-0 opacity-50 bg-[repeating-radial-gradient(circle_at_40%_40%,rgba(255,255,255,0.05)_0,rgba(255,255,255,0.05)_1px,transparent_2px,transparent_5px)]" />
+          )}
+          <span className="absolute bottom-4 left-4 z-10 rounded-full border border-line bg-ink/60 px-3 py-1 text-xs font-medium text-bone-muted backdrop-blur">
             Before
           </span>
         </div>

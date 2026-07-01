@@ -25,9 +25,17 @@ export function BeforeAfterShowcase() {
           </Link>
         </div>
 
-        <FadeUp className="mt-12 grid gap-6 lg:grid-cols-2">
-          <BeforeAfterSlider hue={222} label="Paint correction · gloss black" />
-          <BeforeAfterSlider hue={6} label="Ceramic coating · single stage" />
+        {/* Second comparison intentionally hidden until a new real before/after
+            pair is available. Restore by adding another <BeforeAfterSlider
+            beforeSrc afterSrc label /> here and switching back to a 2-col grid. */}
+        <FadeUp className="mt-12">
+          <div className="mx-auto max-w-3xl">
+            <BeforeAfterSlider
+              beforeSrc="/images/newimages/beforewash.webp"
+              afterSrc="/images/newimages/afterwash.webp"
+              label="Exterior detail · wash & decon"
+            />
+          </div>
         </FadeUp>
       </Container>
     </section>

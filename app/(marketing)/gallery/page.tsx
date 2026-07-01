@@ -40,9 +40,15 @@ export default function GalleryPage() {
       <section className="py-16 md:py-20">
         <Container>
           <SectionHeading eyebrow="Drag to compare" title="Before and after" />
-          <FadeUp className="mt-10 grid gap-6 lg:grid-cols-2">
-            <BeforeAfterSlider hue={222} label="Paint correction · gloss black" />
-            <BeforeAfterSlider hue={6} label="Ceramic coating · single stage" />
+          {/* Second comparison hidden until a new real before/after pair exists. */}
+          <FadeUp className="mt-10">
+            <div className="mx-auto max-w-3xl">
+              <BeforeAfterSlider
+                beforeSrc="/images/newimages/beforewash.webp"
+                afterSrc="/images/newimages/afterwash.webp"
+                label="Exterior detail · wash & decon"
+              />
+            </div>
           </FadeUp>
         </Container>
       </section>
