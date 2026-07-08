@@ -455,7 +455,7 @@ function ScheduleStep({ form }: { form: UseFormReturn<BookingInput> }) {
     <fieldset className="min-w-0">
       <StepHeading title="Pick a date and time" description={`Earliest availability respects our ${businessConfig.booking.minLeadTimeHours} hour lead time.`} />
       <p className="mb-2 text-sm font-medium text-bone">Date</p>
-      <div className="flex snap-x gap-2 overflow-x-auto pb-2">
+      <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
         {availability.map((d) => {
           const active = date === d.date;
           return (
@@ -467,7 +467,7 @@ function ScheduleStep({ form }: { form: UseFormReturn<BookingInput> }) {
                 setValue("time", "");
               }}
               className={cn(
-                "flex min-w-20 shrink-0 snap-start flex-col items-center gap-0.5 rounded-lg border px-3 py-2.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
+                "flex flex-col items-center gap-0.5 rounded-lg border px-2 py-2.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
                 active ? "border-accent bg-accent-soft text-bone" : "border-line bg-ink-3 text-bone-muted hover:border-line-strong",
               )}
             >
