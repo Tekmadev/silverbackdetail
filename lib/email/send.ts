@@ -1,5 +1,6 @@
 import "server-only";
 import { Resend, type CreateEmailResponse } from "resend";
+import { render } from "@react-email/components";
 import { businessConfig } from "@/lib/config/business";
 import type { BookingRecord } from "@/lib/booking/types";
 import type { ContactInput } from "@/lib/booking/schema";
@@ -70,18 +71,26 @@ export async function sendBookingEmails(
   }
   if (fromIsUnsendable()) return { customer: false, owner: false };
   try {
+    // Render templates to HTML ourselves. Passing `react:` makes Resend reach for
+    // its `@react-email/render` peer dependency, which isn't traced into the
+    // production bundle and throws "Failed to render React component". `render`
+    // from @react-email/components (a direct dep) is always bundled.
+    const [customerHtml, ownerHtml] = await Promise.all([
+      render(BookingConfirmation({ record })),
+      render(OwnerNotification({ record })),
+    ]);
     const [customer, owner] = await Promise.all([
       resend.emails.send({
         from: FROM,
         to: record.customer.email,
         subject: `Booking confirmed — ${record.serviceName} (${record.id})`,
-        react: BookingConfirmation({ record }),
+        html: customerHtml,
       }),
       resend.emails.send({
         from: FROM,
         to: businessConfig.contact.bookingEmail,
         subject: `New booking · ${record.id} · ${record.serviceName}`,
-        react: OwnerNotification({ record }),
+        html: ownerHtml,
       }),
     ]);
     return {
@@ -106,7 +115,7 @@ export async function sendRefundEmail(record: BookingRecord): Promise<boolean> {
       from: FROM,
       to: record.customer.email,
       subject: `Deposit refunded — ${record.id}`,
-      react: RefundConfirmation({ record }),
+      html: await render(RefundConfirmation({ record })),
     });
     return succeeded("refund confirmation", res);
   } catch (err) {
