@@ -162,8 +162,11 @@ export function BookingFlow() {
     : "Continue";
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[1fr_340px]">
-      <div>
+    <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_340px]">
+      {/* minmax(0,1fr) (not a bare auto/1fr track) keeps the flexible column from
+          growing to its content width, so the date strip's overflow-x-auto scrolls
+          instead of stretching the page. grid-cols-1 does the same on mobile. */}
+      <div className="min-w-0">
         <Stepper steps={steps} current={stepIndex} />
 
         <form
@@ -449,10 +452,10 @@ function ScheduleStep({ form }: { form: UseFormReturn<BookingInput> }) {
   const time = watch("time");
   const day = availability.find((d) => d.date === date);
   return (
-    <fieldset>
+    <fieldset className="min-w-0">
       <StepHeading title="Pick a date and time" description={`Earliest availability respects our ${businessConfig.booking.minLeadTimeHours} hour lead time.`} />
       <p className="mb-2 text-sm font-medium text-bone">Date</p>
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="flex snap-x gap-2 overflow-x-auto pb-2">
         {availability.map((d) => {
           const active = date === d.date;
           return (
@@ -464,7 +467,7 @@ function ScheduleStep({ form }: { form: UseFormReturn<BookingInput> }) {
                 setValue("time", "");
               }}
               className={cn(
-                "flex min-w-20 shrink-0 flex-col items-center gap-0.5 rounded-lg border px-3 py-2.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
+                "flex min-w-20 shrink-0 snap-start flex-col items-center gap-0.5 rounded-lg border px-3 py-2.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
                 active ? "border-accent bg-accent-soft text-bone" : "border-line bg-ink-3 text-bone-muted hover:border-line-strong",
               )}
             >

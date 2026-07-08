@@ -44,7 +44,10 @@ export async function createBooking(input: BookingInput): Promise<CreateBookingR
   };
 
   await saveBooking(record);
-  await sendBookingEmails(record);
+  const emailed = await sendBookingEmails(record);
+  // When the customer confirmation didn't actually send, tell the confirmation
+  // page so it doesn't promise an email that never arrived.
+  const emailedFlag = emailed.customer ? "" : "&emailed=0";
 
   const token = encodeBooking(record);
 
@@ -71,7 +74,7 @@ export async function createBooking(input: BookingInput): Promise<CreateBookingR
           ],
           metadata: { bookingId: record.id },
           payment_intent_data: { metadata: { bookingId: record.id } },
-          success_url: absoluteUrl(`/booking/${record.id}/confirmation?t=${token}&paid=1`),
+          success_url: absoluteUrl(`/booking/${record.id}/confirmation?t=${token}&paid=1${emailedFlag}`),
           cancel_url: absoluteUrl(`/book?service=${record.serviceSlug}&step=review`),
         });
         if (session.url) {
@@ -89,7 +92,7 @@ export async function createBooking(input: BookingInput): Promise<CreateBookingR
     ok: true,
     id: record.id,
     requiresDeposit: record.requiresDeposit,
-    confirmationUrl: `/booking/${record.id}/confirmation?t=${token}`,
+    confirmationUrl: `/booking/${record.id}/confirmation?t=${token}${emailedFlag}`,
   };
 }
 

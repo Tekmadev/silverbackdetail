@@ -22,10 +22,11 @@ export default async function ConfirmationPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ t?: string; paid?: string }>;
+  searchParams: Promise<{ t?: string; paid?: string; emailed?: string }>;
 }) {
   const { id } = await params;
-  const { t, paid } = await searchParams;
+  const { t, paid, emailed } = await searchParams;
+  const emailFailed = emailed === "0";
 
   let record: BookingRecord | null = (await getBookingById(id)) ?? (t ? decodeBooking(t) : null);
   if (record && paid === "1") record = { ...record, depositPaid: true, status: "confirmed" };
@@ -68,8 +69,18 @@ export default async function ConfirmationPage({
             You are booked in
           </h1>
           <p className="mt-4 max-w-xl text-lg text-bone-muted">
-            Thanks {record.customer.name.split(" ")[0]}. A confirmation is on its way to{" "}
-            <span className="text-bone">{record.customer.email}</span>.
+            {emailFailed ? (
+              <>
+                Thanks {record.customer.name.split(" ")[0]}. Your booking is saved. If a confirmation
+                email doesn&rsquo;t reach <span className="text-bone">{record.customer.email}</span> shortly,
+                call or message us and we&rsquo;ll lock it in.
+              </>
+            ) : (
+              <>
+                Thanks {record.customer.name.split(" ")[0]}. A confirmation is on its way to{" "}
+                <span className="text-bone">{record.customer.email}</span>.
+              </>
+            )}
           </p>
           {record.requiresDeposit && (
             <Badge variant={record.depositPaid ? "success" : "accent"} className="mt-5">
