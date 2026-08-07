@@ -109,13 +109,13 @@ export default function CeramicPromoPage() {
             title="Claim the promo"
             description="Fill this in and we will get back to you with your exact quote and the next open slot."
           />
-          <FadeUp className="mx-auto mt-10 max-w-2xl">
-            <div className="overflow-hidden rounded-xl border border-line bg-ink-3 p-2 sm:p-4">
+          <FadeUp className="mx-auto mt-10 max-w-xl">
+            <div className="overflow-hidden rounded-xl border border-line bg-ink-3 p-4 sm:p-6">
               <GhlFormEmbed
                 formId={form.id}
                 formName={form.name}
                 origin={form.origin}
-                height={form.height}
+                width={form.width}
               />
             </div>
           </FadeUp>

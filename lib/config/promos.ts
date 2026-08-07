@@ -58,12 +58,22 @@ export const ceramicPromo = {
     },
   ],
 
-  /** GoHighLevel inline form embed. */
+  /**
+   * GoHighLevel inline form embed. The frame's height lives in GhlFormEmbed,
+   * which documents the measurements behind it.
+   */
   form: {
     id: "770BPlU0uXRPFZvqJqA9",
     name: "ceramic promo",
     origin: "https://link.tekmadev.com",
-    height: 670,
+    /**
+     * Must match the form's own max-width in the GHL builder, currently 548px
+     * on `.form-builder--wrap`. The form document paints no background, so any
+     * frame width beyond this shows the browser's default white canvas as
+     * gutters either side of the form. Matching the two makes it sit flush.
+     * Change the form width in GHL and this has to follow.
+     */
+    width: 548,
   },
 } as const;
 
