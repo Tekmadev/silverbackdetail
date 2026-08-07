@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Phone, Sparkles, ShieldCheck, Truck, ArrowRight } from "lucide-react";
 import { Container } from "@/components/shared/Container";
-import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { LineReveal } from "@/components/animations/LineReveal";
 import { GhlFormEmbed } from "@/components/promo/GhlFormEmbed";
+import { HydrophobicPanel } from "@/components/promo/HydrophobicPanel";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Magnetic } from "@/components/animations/Magnetic";
@@ -30,45 +31,73 @@ export const metadata: Metadata = {
 
 const ICONS = { sparkles: Sparkles, shield: ShieldCheck, truck: Truck } as const;
 
+/** Mirrors PageHeader's title scale, since this hero rolls its own layout. */
+const HERO_TITLE =
+  "text-balance font-display text-4xl font-semibold leading-[1.05] tracking-tight text-bone sm:text-5xl md:text-6xl";
+
 export default function CeramicPromoPage() {
   const { phoneDisplay, phone, regularPrice, promoPrice, currency, includes, form } = ceramicPromo;
 
   return (
     <>
-      <PageHeader
-        eyebrow="Limited time"
-        title="Stop waxing your car."
-        description="Wax washes off. It melts in the sun. It does nothing to protect your clear coat from micro-scratches. A ceramic coating bonds to the paint and holds a wet-glass finish for years, not weeks."
-      >
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-            <span className="font-display text-4xl font-semibold text-bone sm:text-5xl">
-              From {formatPrice(promoPrice, currency)}
-            </span>
-            <span className="text-lg text-bone-muted line-through">{formatPrice(regularPrice, currency)}</span>
-            <Badge variant="outline" className="border-accent/40 text-accent">
-              Save {formatPrice(promoSavings, currency)}
-            </Badge>
-          </div>
+      {/* Built from LineReveal rather than PageHeader so the hero can carry a
+          second column, without changing the shared header every other page
+          renders. minmax(0,...) on both tracks keeps a long word or a wide
+          child from stretching the grid past the viewport. */}
+      <section className="relative overflow-hidden border-b border-line pt-32 pb-16 md:pt-40 md:pb-20">
+        <div aria-hidden className="grain absolute inset-0" />
+        <div
+          aria-hidden
+          className="absolute right-[-10%] top-[-20%] -z-0 size-[40vw] rounded-full bg-silver/5 blur-[120px]"
+        />
+        <Container className="relative z-10">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,420px)] lg:gap-16">
+            <div className="min-w-0">
+              <LineReveal
+                as="h1"
+                eyebrow="Limited time"
+                title="Stop waxing your car."
+                description="Wax washes off. It melts in the sun. It does nothing to protect your clear coat from micro-scratches. A ceramic coating bonds to the paint and holds a wet-glass finish for years, not weeks."
+                titleClassName={HERO_TITLE}
+                after={
+                  <div className="flex flex-col gap-6 pt-2">
+                    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+                      <span className="font-display text-4xl font-semibold text-bone sm:text-5xl">
+                        From {formatPrice(promoPrice, currency)}
+                      </span>
+                      <span className="text-lg text-bone-muted line-through">
+                        {formatPrice(regularPrice, currency)}
+                      </span>
+                      <Badge variant="outline" className="border-accent/40 text-accent">
+                        Save {formatPrice(promoSavings, currency)}
+                      </Badge>
+                    </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <Magnetic>
-              <Button asChild size="lg">
-                <a href="#claim">
-                  Claim this offer
-                  <ArrowRight className="size-4" />
-                </a>
-              </Button>
-            </Magnetic>
-            <Button asChild size="lg" variant="secondary">
-              <a href={formatPhoneForLink(phone)}>
-                <Phone className="size-4" />
-                Call or text {phoneDisplay}
-              </a>
-            </Button>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Magnetic>
+                        <Button asChild size="lg">
+                          <a href="#claim">
+                            Claim this offer
+                            <ArrowRight className="size-4" />
+                          </a>
+                        </Button>
+                      </Magnetic>
+                      <Button asChild size="lg" variant="secondary">
+                        <a href={formatPhoneForLink(phone)}>
+                          <Phone className="size-4" />
+                          Call or text {phoneDisplay}
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+                }
+              />
+            </div>
+
+            <HydrophobicPanel />
           </div>
-        </div>
-      </PageHeader>
+        </Container>
+      </section>
 
       <section className="py-16 md:py-24">
         <Container>

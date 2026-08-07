@@ -238,6 +238,38 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* =========================================================================
+   Promo hero: hydrophobic beading panel
+   =========================================================================
+   Continuous, decorative loops. Beads slide a short distance and fade rather
+   than travelling the full panel, so the effect is independent of the panel's
+   height and stays correct at every breakpoint. */
+@keyframes sb-bead-slide {
+  0%   { transform: translateY(0) scale(0.9); opacity: 0; }
+  12%  { transform: translateY(0) scale(1); opacity: 1; }
+  55%  { opacity: 1; }
+  100% { transform: translateY(var(--sb-bead-travel, 90px)) scale(0.8); opacity: 0; }
+}
+@keyframes sb-bead-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.72; }
+  50%      { transform: scale(1.14); opacity: 1; }
+}
+@keyframes sb-panel-sheen {
+  0%   { transform: translateX(-130%) skewX(-14deg); opacity: 0; }
+  18%  { opacity: 1; }
+  82%  { opacity: 1; }
+  100% { transform: translateX(240%) skewX(-14deg); opacity: 0; }
+}
+@keyframes sb-nudge {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(5px); }
+}
+
+.sb-bead-slide { animation: sb-bead-slide 6s ease-in infinite; }
+.sb-bead-breathe { animation: sb-bead-breathe 4.5s ease-in-out infinite; }
+.sb-panel-sheen { animation: sb-panel-sheen 7s ease-in-out infinite; }
+.sb-nudge { animation: sb-nudge 1.8s ease-in-out infinite; }
+
 .animate-marquee {
   animation: sb-marquee 40s linear infinite;
 }
@@ -259,4 +291,16 @@
     scroll-behavior: auto !important;
   }
   .animate-marquee { animation: none !important; }
+  /* The global rule above collapses duration to ~0, which would strand these
+     loops on their final keyframe (a faded-out bead). Stop them outright and
+     let the resting markup show instead. */
+  .sb-bead-slide,
+  .sb-bead-breathe,
+  .sb-panel-sheen,
+  .sb-nudge {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+  .sb-panel-sheen { opacity: 0; }
 }
