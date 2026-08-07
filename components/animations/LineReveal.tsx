@@ -88,9 +88,13 @@ export function LineReveal({
           beforeRef.current ? 0.1 : 0,
         );
       }
+      // 125 rather than 110: `.lr-word-mask` in globals.css extends its clip box
+      // 0.15em below the line so descenders are not cut off, and the word has to
+      // start below that taller box or its top edge shows before it animates.
+      // Tightest heading leading is 1.05, needing (1.05 + 0.15) / 1.05 = 115%.
       tl.from(
         split.words,
-        { yPercent: 110, opacity: 0, duration: 0.7, stagger: 0.045, ease: "power3.out" },
+        { yPercent: 125, opacity: 0, duration: 0.7, stagger: 0.045, ease: "power3.out" },
         "-=0.15",
       );
       if (descRef.current) {

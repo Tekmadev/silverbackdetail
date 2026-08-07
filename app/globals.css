@@ -204,6 +204,26 @@
 }
 
 /* =========================================================================
+   SplitText word masks (LineReveal)
+   =========================================================================
+   GSAP wraps each word in a `.lr-word-mask` with `overflow: clip`, which clips
+   to the padding box. Display headings run a tight line-height (1.05 to 1.1)
+   while Fraunces has a font box of 1.233em, so glyphs sit about 0.09em below
+   the content box and descenders on g, y, p, q were being cut off.
+
+   Extending the padding box downward restores them. The equal negative margin
+   keeps layout identical: an inline-block whose overflow is not `visible` takes
+   its baseline from the bottom margin edge, so cancelling the padding there
+   leaves both the baseline and the line box exactly where they were.
+
+   Paired with the `yPercent` start in LineReveal, which must stay large enough
+   to park each word below this taller clip box before it animates up. */
+.lr-word-mask {
+  padding-bottom: 0.15em;
+  margin-bottom: -0.15em;
+}
+
+/* =========================================================================
    Keyframes
    ========================================================================= */
 @keyframes sb-marquee {
