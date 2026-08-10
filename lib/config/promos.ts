@@ -11,6 +11,23 @@
  * When a campaign ends, delete its entry here and the route that reads it.
  */
 
+import { businessConfig } from "@/lib/config/business";
+
+/**
+ * The standing ceramic price is read from business.ts rather than copied, so
+ * the "was" price on the promo page can never drift from the price shown on
+ * /services/ceramic-coating. A hardcoded copy is exactly how this page came to
+ * advertise a regular price of $999 against a listed price of $1,200.
+ *
+ * Throws at build time rather than falling back to a guess: a wrong strike
+ * price is a claim about what the service normally costs, so it should stop
+ * the build, not ship quietly.
+ */
+const CERAMIC_SERVICE = businessConfig.services.find((s) => s.slug === "ceramic-coating");
+if (!CERAMIC_SERVICE) {
+  throw new Error("promos.ts: no 'ceramic-coating' service in business.ts to source the regular price from.");
+}
+
 export const ceramicPromo = {
   name: "Ultimate 5-Year Ceramic Coating",
 
@@ -23,15 +40,14 @@ export const ceramicPromo = {
   phoneDisplay: "(365) 389-6767",
 
   /**
-   * Promotional pricing as written in the ad.
-   *
-   * Note: businessConfig lists ceramic coating at priceFrom 1200. These
-   * numbers are lower and are campaign-specific, which is the other reason
-   * this file is separate and the promo page is noindex.
+   * `regularPrice` is the standing ceramic price from business.ts, so the
+   * strike-through figure always matches what /services/ceramic-coating shows.
+   * Only `promoPrice` is campaign-specific, which is still why this file stays
+   * separate from business.ts and why the promo page is noindex.
    */
-  regularPrice: 999,
+  regularPrice: CERAMIC_SERVICE.priceFrom,
   promoPrice: 799,
-  currency: "CAD",
+  currency: CERAMIC_SERVICE.currency,
 
   includes: [
     {
