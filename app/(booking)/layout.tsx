@@ -4,6 +4,7 @@ import { Container } from "@/components/shared/Container";
 import { Logo } from "@/components/shared/Logo";
 import { businessConfig } from "@/lib/config/business";
 import { formatPhoneForLink } from "@/lib/config/site";
+import { PromoBanner } from "@/components/promo/PromoBanner";
 
 /**
  * Minimal chrome for the booking flow. Deliberately omits the Lenis smooth-scroll
@@ -12,6 +13,10 @@ import { formatPhoneForLink } from "@/lib/config/site";
 export default function BookingLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col">
+      {/* In normal flow, above the sticky header: this layout has no top
+          clearance to borrow, so the bar pushes content down rather than
+          overlapping the first step of the form. */}
+      <PromoBanner mode="inline" />
       <header className="sticky top-0 z-50 border-b border-line bg-ink/85 backdrop-blur-xl">
         <Container className="flex h-16 items-center justify-between">
           <Link href="/" aria-label={`${businessConfig.name} home`} className="rounded-md">

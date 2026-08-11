@@ -14,7 +14,7 @@ import { FadeUp } from "@/components/animations/FadeUp";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getServiceSchema, getBreadcrumbSchema, getFaqSchema } from "@/lib/seo/schema";
 import { businessConfig } from "@/lib/config/business";
-import { getServiceBySlug, formatPrice } from "@/lib/config/site";
+import { getServiceBySlug, formatPrice, getServicePricing } from "@/lib/config/site";
 import type { Faq } from "@/lib/data/content";
 
 export function generateStaticParams() {
@@ -47,7 +47,11 @@ function serviceFaqs(slug: string): Faq[] {
   return [
     {
       question: `How much does ${s.name.toLowerCase()} cost in ${businessConfig.address.city}?`,
-      answer: `${s.name} starts at ${formatPrice(s.priceFrom, s.currency)} ${s.currency}. The final price depends on your vehicle's size and condition.${
+      answer: `${s.name} starts at ${formatPrice(getServicePricing(s).current, s.currency)} ${s.currency}${
+        getServicePricing(s).isPromo
+          ? `, down from ${formatPrice(getServicePricing(s).regular, s.currency)} for a limited time`
+          : ""
+      }. The final price depends on your vehicle's size and condition.${
         s.requiresDeposit ? ` A refundable ${formatPrice(s.depositAmount, s.currency)} deposit secures your slot and is credited to your final invoice.` : ""
       }`,
     },
@@ -71,6 +75,7 @@ export default async function ServiceDetailPage({
   const service = getServiceBySlug(slug);
   if (!service) notFound();
 
+  const pricing = getServicePricing(service);
   const faqs = serviceFaqs(slug);
   const related = businessConfig.services.filter((s) => s.slug !== slug).slice(0, 3);
   const gallery = service.gallery as ReadonlyArray<{ src: string; caption: string }>;
@@ -99,8 +104,13 @@ export default async function ServiceDetailPage({
         ]}
       >
         <div className="flex flex-wrap items-center gap-3">
-          <Badge variant="outline">
-            <Tag className="size-3.5" /> from {formatPrice(service.priceFrom, service.currency)}
+          <Badge variant={pricing.isPromo ? "accent" : "outline"}>
+            <Tag className="size-3.5" /> from {formatPrice(pricing.current, pricing.currency)}
+            {pricing.isPromo && (
+              <span className="ml-1.5 font-normal opacity-70 line-through">
+                {formatPrice(pricing.regular, pricing.currency)}
+              </span>
+            )}
           </Badge>
           <Badge variant="outline">
             <Clock className="size-3.5" /> {service.duration}
@@ -209,9 +219,17 @@ export default async function ServiceDetailPage({
               <div className="rounded-xl border border-line bg-ink-3 p-7">
                 <p className="eyebrow">Book this service</p>
                 <p className="mt-3 font-display text-4xl font-semibold text-bone">
-                  {formatPrice(service.priceFrom, service.currency)}
+                  {formatPrice(pricing.current, pricing.currency)}
                   <span className="ml-1 text-base font-normal text-bone-muted">from</span>
                 </p>
+                {pricing.isPromo && (
+                  <p className="mt-1 text-sm text-bone-muted">
+                    <span className="line-through">{formatPrice(pricing.regular, pricing.currency)}</span>
+                    <span className="ml-2 text-accent">
+                      Save {formatPrice(pricing.savings, pricing.currency)} · {pricing.promo?.label}
+                    </span>
+                  </p>
+                )}
                 <dl className="mt-6 space-y-3 border-t border-line pt-5 text-sm">
                   <div className="flex justify-between">
                     <dt className="text-bone-muted">Duration</dt>

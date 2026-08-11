@@ -1,6 +1,7 @@
 import { ScrollDrivenHero } from "@/components/hero/ScrollDrivenHero";
 import { StatsCounter } from "@/components/sections/StatsCounter";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
+import { PromoSpotlight } from "@/components/sections/PromoSpotlight";
 import { WhyUs } from "@/components/sections/WhyUs";
 import { ProcessSection } from "@/components/sections/ProcessSection";
 import { BeforeAfterShowcase } from "@/components/sections/BeforeAfterShowcase";
@@ -17,6 +18,7 @@ export default function HomePage() {
       <ScrollDrivenHero />
       <StatsCounter />
       <ServicesGrid />
+      <PromoSpotlight />
       <WhyUs />
       <ProcessSection />
       <BeforeAfterShowcase />

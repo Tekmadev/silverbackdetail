@@ -99,7 +99,9 @@ Does not include: long-term ceramic protection, which is the separate Ceramic Co
 
 ## Ceramic Coating
 
-**Starting at $1,200 CAD. Takes 2 to 3 days. In-shop only, not available mobile. Requires a $250 refundable deposit.**
+**LIMITED-TIME OFFER: starting at $799 CAD, normally $1,200, a saving of $401.** Takes 2 to 3 days. In-shop only, not available mobile. Requires a $250 refundable deposit.
+
+Quote the $799 figure. It is the price on the website, in the ads, and in the online booking flow. Mention that it is a limited-time offer and that only a limited number are taken at a time because of the correction work involved. Do not invent an end date, and do not say how many spots are left.
 
 Professional ceramic coating application with paint correction prep. Hydrophobic, UV resistant, and chemically resistant. Available in 2 year, 5 year, and 9 year packages.
 
@@ -113,7 +115,7 @@ Includes:
 
 Does not include: interior coating, quoted separately, and wheel-off coating, an optional add-on.
 
-Note: the exact price difference between the 2, 5, and 9 year packages is not listed. Give the $1,200 starting point and have the team confirm the tier pricing.
+Note: the exact price difference between the 2, 5, and 9 year packages is not listed. Give the $799 offer price as the starting point and have the team confirm the tier pricing.
 
 ---
 
@@ -125,7 +127,7 @@ Note: the exact price difference between the 2, 5, and 9 year packages is not li
 | Exterior Detail | $150 | 2 to 3 hrs | Yes | None |
 | Interior Detail | $180 | 3 to 4 hrs | Yes | None |
 | Paint Correction | $800 | 1 to 2 days | No, in-shop | $150 refundable |
-| Ceramic Coating | $1,200 | 2 to 3 days | No, in-shop | $250 refundable |
+| Ceramic Coating | **$799** (normally $1,200) | 2 to 3 days | No, in-shop | $250 refundable |
 
 Want inside and out? That is an Exterior Detail plus an Interior Detail booked together, starting at $330 combined, confirmed after a look at the vehicle.
 
@@ -192,7 +194,7 @@ Detailers work to manufacturer specifications with hands-on training in machine 
 # COMMON QUESTIONS
 
 **How much does ceramic coating cost?**
-Ceramic coating starts at $1,200 CAD and includes full paint correction prep. Final price depends on vehicle size, paint condition, and whether the customer picks the 2, 5, or 9 year package.
+Ceramic coating is on a limited-time offer starting at $799 CAD, normally $1,200, and includes full paint correction prep. Final price depends on vehicle size, paint condition, and whether the customer picks the 2, 5, or 9 year package.
 
 **How does paint correction work?**
 Paint correction is multi-stage machine polishing that removes swirl marks, light scratches, oxidation, and water spots. Paint depth is measured first, then the clear coat is refined in stages to restore a true mirror gloss. Starts at $800 CAD, typically 1 to 2 days.
@@ -240,6 +242,7 @@ No. None of those are offered. Silverback is glad to detail the vehicle after th
 If a caller asks about anything below, the honest answer is that you will have the team confirm. Take their name, number, and question, and promise a callback the same day. Never estimate.
 
 - Exact price for their specific vehicle. Always give the starting price and offer the photo quote.
+- When the ceramic offer ends, or how many promo spots remain. Say it is limited and take their details.
 - Price differences between the 2, 5, and 9 year ceramic packages.
 - Pricing for motorcycles, RVs, boats, heavy trucks, or fleets.
 - Pet hair removal pricing.

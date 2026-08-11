@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Phone, Sparkles, ShieldCheck, Truck, ArrowRight } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
@@ -10,8 +11,14 @@ import { Badge } from "@/components/ui/badge";
 import { Magnetic } from "@/components/animations/Magnetic";
 import { FadeUp, FadeUpItem } from "@/components/animations/FadeUp";
 import { InstagramIcon } from "@/components/shared/SocialIcons";
-import { ceramicPromo, promoSavings } from "@/lib/config/promos";
-import { formatPhoneForLink, getInstagramDmLink, formatPrice } from "@/lib/config/site";
+import { ceramicPromoPage } from "@/lib/config/promos";
+import {
+  formatPhoneForLink,
+  getInstagramDmLink,
+  formatPrice,
+  getServiceBySlug,
+  getServicePricing,
+} from "@/lib/config/site";
 
 /**
  * Paid-ad landing page for the 5-year ceramic coating campaign.
@@ -36,7 +43,13 @@ const HERO_TITLE =
   "text-balance font-display text-4xl font-semibold leading-[1.05] tracking-tight text-bone sm:text-5xl md:text-6xl";
 
 export default function CeramicPromoPage() {
-  const { phoneDisplay, phone, regularPrice, promoPrice, currency, includes, form } = ceramicPromo;
+  const { phoneDisplay, phone, includes, form, serviceSlug } = ceramicPromoPage;
+  // Pricing comes from the shared promo layer, the same source the service
+  // cards, booking flow, and structured data read, so this page can never
+  // advertise a figure the rest of the site disagrees with.
+  const service = getServiceBySlug(serviceSlug);
+  if (!service) notFound();
+  const pricing = getServicePricing(service);
 
   return (
     <>
@@ -63,13 +76,13 @@ export default function CeramicPromoPage() {
                   <div className="flex flex-col gap-6 pt-2">
                     <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
                       <span className="font-display text-4xl font-semibold text-bone sm:text-5xl">
-                        From {formatPrice(promoPrice, currency)}
+                        From {formatPrice(pricing.current, pricing.currency)}
                       </span>
                       <span className="text-lg text-bone-muted line-through">
-                        {formatPrice(regularPrice, currency)}
+                        {formatPrice(pricing.regular, pricing.currency)}
                       </span>
                       <Badge variant="outline" className="border-accent/40 text-accent">
-                        Save {formatPrice(promoSavings, currency)}
+                        Save {formatPrice(pricing.savings, pricing.currency)}
                       </Badge>
                     </div>
 

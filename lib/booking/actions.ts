@@ -5,7 +5,7 @@ import { contactSchema, type ContactInput } from "@/lib/booking/schema";
 import { isSlotAvailable } from "@/lib/booking/availability";
 import { generateBookingId, encodeBooking, decodeBooking } from "@/lib/booking/token";
 import type { BookingRecord, CreateBookingResult } from "@/lib/booking/types";
-import { getServiceBySlug, absoluteUrl } from "@/lib/config/site";
+import { getServiceBySlug, absoluteUrl, getServicePricing } from "@/lib/config/site";
 import { saveBooking, getBookingById, updateBooking } from "@/lib/storage/bookings";
 import { sendBookingEmails, sendRefundEmail, sendContactEmail } from "@/lib/email/send";
 import { getStripe, isStripeConfigured } from "@/lib/stripe/client";
@@ -35,7 +35,10 @@ export async function createBooking(input: BookingInput): Promise<CreateBookingR
     status: "pending",
     createdAt: new Date().toISOString(),
     serviceName: service.name,
-    priceFrom: service.priceFrom,
+    // Snapshot the price the customer was actually quoted, promo included, so
+    // the stored record and the confirmation email match what they saw. Ending
+    // a promo must not retroactively reprice bookings taken during it.
+    priceFrom: getServicePricing(service).current,
     currency: service.currency,
     requiresDeposit: service.requiresDeposit,
     depositAmount: service.depositAmount,

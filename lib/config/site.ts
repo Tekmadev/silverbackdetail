@@ -4,6 +4,7 @@
  */
 
 import { businessConfig, type Service } from "@/lib/config/business";
+import { servicePromos, type ServicePromo } from "@/lib/config/promos";
 
 const DAY_ORDER = [
   "monday",
@@ -61,6 +62,61 @@ export function getWhatsAppLink(
 export function getInstagramDmLink(): string {
   const username = businessConfig.social.instagram.handle.replace(/^@/, "");
   return `https://ig.me/m/${username}`;
+}
+
+/**
+ * What a service costs today, promotions included.
+ *
+ * Every customer-facing price goes through here rather than reading `priceFrom`
+ * directly, so adding or ending a promo in promos.ts updates the service cards,
+ * the service page, the booking flow, structured data, and the announcement bar
+ * together. `regular` stays available for the strike-through.
+ */
+export type ServicePricing = {
+  /** The standing price from business.ts. */
+  regular: number;
+  /** What the customer pays today: the promo price when one is running. */
+  current: number;
+  currency: string;
+  isPromo: boolean;
+  /** Zero when no promo is running. */
+  savings: number;
+  promo?: ServicePromo;
+};
+
+export function getPromoForService(slug: string): ServicePromo | undefined {
+  return servicePromos.find((p) => p.serviceSlug === slug);
+}
+
+export function getServicePricing(
+  service: Pick<Service, "slug" | "priceFrom" | "currency">,
+): ServicePricing {
+  const promo = getPromoForService(service.slug);
+  const current = promo ? promo.price : service.priceFrom;
+  return {
+    regular: service.priceFrom,
+    current,
+    currency: service.currency,
+    isPromo: Boolean(promo),
+    savings: service.priceFrom - current,
+    promo,
+  };
+}
+
+/**
+ * The single promo to feature in shared surfaces (announcement bar, home page).
+ * First entry wins, so ordering `servicePromos` is how you choose the hero
+ * offer. Returns undefined when nothing is running, which is what lets those
+ * surfaces disappear on their own.
+ */
+export function getFeaturedPromo():
+  | { promo: ServicePromo; service: Service; pricing: ServicePricing }
+  | undefined {
+  const promo = servicePromos[0];
+  if (!promo) return undefined;
+  const service = getServiceBySlug(promo.serviceSlug);
+  if (!service) return undefined;
+  return { promo, service, pricing: getServicePricing(service) };
 }
 
 export function formatPrice(amount: number, currency = "CAD"): string {

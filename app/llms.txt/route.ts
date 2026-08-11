@@ -1,5 +1,5 @@
 import { businessConfig } from "@/lib/config/business";
-import { absoluteUrl } from "@/lib/config/site";
+import { absoluteUrl, getServicePricing } from "@/lib/config/site";
 
 // Regenerate occasionally; content is derived from the business config.
 export const revalidate = 86400;
@@ -15,10 +15,13 @@ export async function GET() {
     "## Key pages",
     `- [Home](${seo.siteUrl}): Overview of premium detailing services in ${businessConfig.address.city}, Ontario.`,
     `- [Services](${absoluteUrl("/services")}): All detailing services with starting prices and what each includes.`,
-    ...services.map(
-      (s) =>
-        `- [${s.name}](${absoluteUrl(`/services/${s.slug}`)}): ${s.shortDescription} From ${s.priceFrom} ${s.currency}.`,
-    ),
+    ...services.map((s) => {
+      const p = getServicePricing(s);
+      const price = p.isPromo
+        ? `From ${p.current} ${p.currency} (limited-time offer, normally ${p.regular} ${p.currency}).`
+        : `From ${p.current} ${p.currency}.`;
+      return `- [${s.name}](${absoluteUrl(`/services/${s.slug}`)}): ${s.shortDescription} ${price}`;
+    }),
     `- [Mobile Detailing](${absoluteUrl("/mobile-detailing")}): Mobile car detailing brought to your home or workplace.`,
     `- [Gallery](${absoluteUrl("/gallery")}): Before and after detailing and correction work.`,
     `- [About](${absoluteUrl("/about")}): Brand story, philosophy, and process.`,

@@ -265,6 +265,15 @@
   50%      { transform: translateY(5px); }
 }
 
+/* Announcement bar entrance. Lives on an inner element so it cannot fight the
+   outer element's scroll-driven transition (a filled animation would otherwise
+   keep overriding the transform the transition is trying to animate). */
+@keyframes sb-slide-down {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.sb-slide-down { animation: sb-slide-down 0.55s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
 .sb-bead-slide { animation: sb-bead-slide 6s ease-in infinite; }
 .sb-bead-breathe { animation: sb-bead-breathe 4.5s ease-in-out infinite; }
 .sb-panel-sheen { animation: sb-panel-sheen 7s ease-in-out infinite; }
@@ -294,6 +303,7 @@
   /* The global rule above collapses duration to ~0, which would strand these
      loops on their final keyframe (a faded-out bead). Stop them outright and
      let the resting markup show instead. */
+  .sb-slide-down,
   .sb-bead-slide,
   .sb-bead-breathe,
   .sb-panel-sheen,

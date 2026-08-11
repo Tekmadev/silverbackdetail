@@ -4,7 +4,7 @@
  */
 
 import { businessConfig, type Service } from "@/lib/config/business";
-import { absoluteUrl, getOpeningHoursSpecification, formatPrice } from "@/lib/config/site";
+import { absoluteUrl, getOpeningHoursSpecification, formatPrice, getServicePricing } from "@/lib/config/site";
 import type { Faq } from "@/lib/data/content";
 
 const { name, legalName, address, contact, seo, serviceAreas } = businessConfig;
@@ -42,17 +42,20 @@ export function getLocalBusinessSchema(): Record<string, unknown> {
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Detailing services",
+      // Promotional price when one is running, so structured data states what
+      // the service actually costs today rather than a price nobody is paying.
       itemListElement: businessConfig.services.map((s) => ({
         "@type": "Offer",
         itemOffered: { "@type": "Service", name: s.name },
         priceCurrency: s.currency,
-        price: s.priceFrom,
+        price: getServicePricing(s).current,
       })),
     },
   };
 }
 
 export function getServiceSchema(service: Service): Record<string, unknown> {
+  const pricing = getServicePricing(service);
   return {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -66,16 +69,20 @@ export function getServiceSchema(service: Service): Record<string, unknown> {
       "@type": "Offer",
       url: absoluteUrl(`/services/${service.slug}`),
       priceCurrency: service.currency,
-      price: service.priceFrom,
+      price: pricing.current,
       priceSpecification: {
         "@type": "PriceSpecification",
-        price: service.priceFrom,
+        price: pricing.current,
         priceCurrency: service.currency,
         valueAddedTaxIncluded: false,
         description: `Starting price. Final quote depends on vehicle size and condition. From ${formatPrice(
-          service.priceFrom,
+          pricing.current,
           service.currency,
-        )}.`,
+        )}.${
+          pricing.isPromo
+            ? ` Limited-time offer, normally ${formatPrice(pricing.regular, service.currency)}.`
+            : ""
+        }`,
       },
       availability: "https://schema.org/InStock",
     },

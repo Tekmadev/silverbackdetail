@@ -1,5 +1,5 @@
 import { businessConfig } from "@/lib/config/business";
-import { absoluteUrl, getWeeklyHours } from "@/lib/config/site";
+import { absoluteUrl, getWeeklyHours, getServicePricing } from "@/lib/config/site";
 import { faqs, processSteps } from "@/lib/data/content";
 
 export const revalidate = 86400;
@@ -32,7 +32,13 @@ export async function GET() {
     out.push("");
     out.push(`### ${s.name}`);
     out.push(`URL: ${absoluteUrl(`/services/${s.slug}`)}`);
-    out.push(`Starting price: ${s.priceFrom} ${s.currency}`);
+    const pricing = getServicePricing(s);
+    out.push(`Starting price: ${pricing.current} ${pricing.currency}`);
+    if (pricing.isPromo) {
+      out.push(
+        `Limited-time offer: normally ${pricing.regular} ${pricing.currency}, saving ${pricing.savings} ${pricing.currency}`,
+      );
+    }
     out.push(`Duration: ${s.duration}`);
     out.push(
       `Deposit: ${

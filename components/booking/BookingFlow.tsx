@@ -25,7 +25,7 @@ import { bookingSchema, STEP_FIELDS, VEHICLE_CONDITIONS, type BookingInput } fro
 import { createBooking } from "@/lib/booking/actions";
 import { getAvailability, formatSlotLabel } from "@/lib/booking/availability";
 import { businessConfig } from "@/lib/config/business";
-import { getServiceBySlug, formatPrice } from "@/lib/config/site";
+import { getServiceBySlug, formatPrice, getServicePricing } from "@/lib/config/site";
 import { cn } from "@/lib/utils";
 
 type StepName = "service" | "vehicle" | "location" | "schedule" | "customer" | "review";
@@ -338,7 +338,17 @@ function ServiceStep({ form }: { form: UseFormReturn<BookingInput> }) {
               </div>
               <span className="text-sm text-bone-muted">{s.shortDescription}</span>
               <div className="mt-1 flex flex-wrap items-center gap-2">
-                <Badge variant="outline">from {formatPrice(s.priceFrom, s.currency)}</Badge>
+                <Badge variant="outline">
+                  from {formatPrice(getServicePricing(s).current, s.currency)}
+                  {getServicePricing(s).isPromo && (
+                    <span className="ml-1.5 opacity-60 line-through">
+                      {formatPrice(getServicePricing(s).regular, s.currency)}
+                    </span>
+                  )}
+                </Badge>
+                {getServicePricing(s).isPromo && (
+                  <Badge variant="accent">{getServicePricing(s).promo?.label}</Badge>
+                )}
                 {s.requiresDeposit && <Badge variant="accent">Deposit secures slot</Badge>}
               </div>
             </button>
@@ -538,7 +548,14 @@ function ReviewStep({ form }: { form: UseFormReturn<BookingInput> }) {
     <fieldset>
       <StepHeading title="Review and secure your slot" description="Confirm the details below. Your deposit is fully refundable." />
       <div className="space-y-3 rounded-xl border border-line bg-ink-3 p-6 text-sm">
-        <Row label="Service" value={`${service.name} · from ${formatPrice(service.priceFrom, service.currency)}`} />
+        <Row
+          label="Service"
+          value={`${service.name} · from ${formatPrice(getServicePricing(service).current, service.currency)}${
+            getServicePricing(service).isPromo
+              ? ` (was ${formatPrice(getServicePricing(service).regular, service.currency)})`
+              : ""
+          }`}
+        />
         <Row label="Vehicle" value={`${v.vehicle.year} ${v.vehicle.make} ${v.vehicle.model} · ${v.vehicle.colour}`} />
         <Row label="Location" value={v.location.type === "mobile" ? `Mobile · ${v.location.address}` : "In-shop · Hamilton"} />
         <Row label="When" value={v.date ? `${v.date} at ${formatSlotLabel(v.time)}` : "—"} />
@@ -584,7 +601,17 @@ function BookingSummary({
         </h2>
         <dl className="mt-5 space-y-3 text-sm">
           <SummaryRow label="Service" value={service?.name ?? "Not selected"} />
-          <SummaryRow label="From" value={service ? formatPrice(service.priceFrom, service.currency) : "—"} />
+          <SummaryRow
+            label="From"
+            value={service ? formatPrice(getServicePricing(service).current, service.currency) : "—"}
+          />
+          {service && getServicePricing(service).isPromo && (
+            <SummaryRow
+              label={getServicePricing(service).promo?.label ?? "Promo"}
+              value={`Save ${formatPrice(getServicePricing(service).savings, service.currency)}`}
+              highlight
+            />
+          )}
           <SummaryRow label="Duration" value={service?.duration ?? "—"} />
           <SummaryRow label="When" value={date ? `${date}${time ? ` · ${formatSlotLabel(time)}` : ""}` : "—"} />
           {service?.requiresDeposit && (

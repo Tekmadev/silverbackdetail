@@ -6,7 +6,7 @@ import Image from "next/image";
 import { ArrowUpRight, Clock } from "lucide-react";
 import { motion, useMotionValue, useSpring, useReducedMotion, useTransform } from "motion/react";
 import { Badge } from "@/components/ui/badge";
-import { formatPrice } from "@/lib/config/site";
+import { formatPrice, getServicePricing } from "@/lib/config/site";
 import type { Service } from "@/lib/config/business";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +17,7 @@ const CATEGORY_GRADIENT: Record<string, string> = {
 };
 
 export function ServiceCard({ service, className }: { service: Service; className?: string }) {
+  const pricing = getServicePricing(service);
   const reduce = useReducedMotion();
   const ref = React.useRef<HTMLDivElement>(null);
   const px = useMotionValue(0.5);
@@ -74,7 +75,8 @@ export function ServiceCard({ service, className }: { service: Service; classNam
             </>
           )}
           <div className="absolute left-5 top-5 flex flex-wrap gap-2">
-            {service.featured && <Badge variant="accent">Featured</Badge>}
+            {pricing.isPromo && <Badge variant="accent">{pricing.promo?.label}</Badge>}
+            {service.featured && !pricing.isPromo && <Badge variant="accent">Featured</Badge>}
             {service.requiresDeposit && <Badge variant="outline">Deposit secures slot</Badge>}
             {service.mobileAvailable && <Badge variant="outline">Mobile available</Badge>}
           </div>
@@ -88,7 +90,14 @@ export function ServiceCard({ service, className }: { service: Service; classNam
             <h3 className="font-display text-xl font-semibold text-bone">{service.name}</h3>
             <span className="shrink-0 text-right text-sm text-bone-muted">
               from
-              <span className="block font-medium text-silver-bright">{formatPrice(service.priceFrom, service.currency)}</span>
+              <span className="block font-medium text-silver-bright">
+                {formatPrice(pricing.current, pricing.currency)}
+              </span>
+              {pricing.isPromo && (
+                <span className="block text-xs text-bone-muted line-through">
+                  {formatPrice(pricing.regular, pricing.currency)}
+                </span>
+              )}
             </span>
           </div>
           <p className="text-sm leading-relaxed text-bone-muted">{service.shortDescription}</p>
