@@ -55,12 +55,13 @@ export const ceramicPromoPage = {
   name: "Ultimate 5-Year Ceramic Coating",
 
   /**
-   * Call-tracking number from the ad creative, so campaign calls are
-   * attributable. This is NOT businessConfig.contact.phone and must not
-   * replace it anywhere else on the site.
+   * The 24/7 line, read from business.ts rather than repeated here. The landing
+   * page leads with it because ad traffic arrives at all hours and a missed call
+   * is a lost booking. Distinct from businessConfig.contact.phone, which reaches
+   * the shop during opening hours.
    */
-  phone: "+1-365-389-6767",
-  phoneDisplay: "(365) 389-6767",
+  phone: businessConfig.contact.phone24h,
+  phoneDisplay: businessConfig.contact.phone24hDisplay,
 
   includes: [
     {
@@ -75,34 +76,55 @@ export const ceramicPromoPage = {
     },
     {
       /**
-       * From the ad copy. Heads up: businessConfig marks ceramic-coating
-       * mobileAvailable: false, and /services plus /mobile-detailing both state
-       * that ceramic is in-shop only because curing needs a controlled
-       * environment. Delete this entry to bring the page back in line with the
-       * rest of the site.
+       * The ad copy promises "100% Mobile Service", which the rest of the site
+       * contradicts: businessConfig marks ceramic-coating mobileAvailable:false,
+       * and /services and /mobile-detailing both say ceramic is in-shop because
+       * curing needs a controlled environment.
+       *
+       * Worded as a maybe rather than dropped, because whether a given car can
+       * be coated on site depends on the driveway, the weather, and the coating,
+       * and that is a judgement call made per booking. Promising it outright
+       * sets up a broken promise on the day; deleting it loses people the ad
+       * brought in on exactly that hook. So the page invites the conversation
+       * instead of pre-answering it.
+       *
+       * If the shop settles on a firm yes or no, replace this with the real
+       * answer and update businessConfig.mobileAvailable to match.
        */
-      title: "Mobile service",
-      description: "We bring the shop right to your driveway, anywhere in the Hamilton area.",
+      title: "Mobile where possible",
+      description:
+        "Coatings cure best in a controlled environment, so most are done in the shop. Ask when you enquire and we will confirm whether yours can be done at your place.",
       icon: "truck" as const,
     },
   ],
 
   /**
-   * GoHighLevel inline form embed. The frame's height lives in GhlFormEmbed,
-   * which documents the measurements behind it.
+   * GoHighLevel inline form embed. GhlFormEmbed sizes the frame to the form's
+   * reported height, so there is no height to keep in step here.
    */
   form: {
     id: "770BPlU0uXRPFZvqJqA9",
     name: "ceramic promo",
     origin: "https://link.tekmadev.com",
     /**
-     * Must match the form's own max-width in the GHL builder, currently 548px
-     * on `.form-builder--wrap`. The form document paints no background, so any
-     * frame width beyond this shows the browser's default white canvas as
-     * gutters either side of the form. Matching the two makes it sit flush.
-     * Change the form width in GHL and this has to follow.
+     * The form's own max-width in the GHL builder, currently 800px on
+     * `.form-builder--wrap`. The form document paints no background, so a frame
+     * wider than this would show the browser's white canvas as gutters either
+     * side. The layout keeps the frame around 526px, well under the cap, so
+     * this is a guard rather than something that currently binds. Narrow the
+     * form in GHL and this has to follow it down.
      */
-    width: 548,
+    maxWidth: 800,
+  },
+
+  /**
+   * GoHighLevel booking calendar, for people who would rather pick a slot than
+   * fill in a form. Note this books into GHL's calendar, not the site's own
+   * /book flow, so the two do not know about each other's appointments.
+   */
+  calendar: {
+    id: "glb0ZHT4lPOI5eC2E0Ni",
+    name: "Book the ceramic coating promo",
   },
 } as const;
 

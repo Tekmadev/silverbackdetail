@@ -5,6 +5,7 @@ import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { LineReveal } from "@/components/animations/LineReveal";
 import { GhlFormEmbed } from "@/components/promo/GhlFormEmbed";
+import { GhlCalendarEmbed } from "@/components/promo/GhlCalendarEmbed";
 import { HydrophobicPanel } from "@/components/promo/HydrophobicPanel";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -43,7 +44,7 @@ const HERO_TITLE =
   "text-balance font-display text-4xl font-semibold leading-[1.05] tracking-tight text-bone sm:text-5xl md:text-6xl";
 
 export default function CeramicPromoPage() {
-  const { phoneDisplay, phone, includes, form, serviceSlug } = ceramicPromoPage;
+  const { phoneDisplay, phone, includes, form, calendar, serviceSlug } = ceramicPromoPage;
   // Pricing comes from the shared promo layer, the same source the service
   // cards, booking flow, and structured data read, so this page can never
   // advertise a figure the rest of the site disagrees with.
@@ -112,6 +113,24 @@ export default function CeramicPromoPage() {
         </Container>
       </section>
 
+      <section id="book" className="scroll-mt-28 border-b border-line bg-ink-2 py-16 md:py-20">
+        <Container>
+          <SectionHeading
+            align="center"
+            eyebrow="Ready to go"
+            title="Pick your slot"
+            description="Know what you want? Choose a date and time and we will confirm by text. If you would rather get a quote first, the form further down is the better route."
+          />
+          <FadeUp className="mx-auto mt-10 max-w-3xl">
+            <GhlCalendarEmbed
+              calendarId={calendar.id}
+              calendarName={calendar.name}
+              origin={form.origin}
+            />
+          </FadeUp>
+        </Container>
+      </section>
+
       <section className="py-16 md:py-24">
         <Container>
           <SectionHeading
@@ -157,7 +176,7 @@ export default function CeramicPromoPage() {
                 formId={form.id}
                 formName={form.name}
                 origin={form.origin}
-                width={form.width}
+                maxWidth={form.maxWidth}
               />
             </div>
           </FadeUp>

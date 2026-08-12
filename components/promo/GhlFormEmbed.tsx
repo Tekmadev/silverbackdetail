@@ -1,60 +1,71 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import { useGhlEmbedHeight } from "./useGhlEmbedHeight";
 
 /**
- * GoHighLevel inline form embed.
+ * GoHighLevel inline form embed, sized to its content.
  *
- * Two deliberate departures from GHL's copy-paste snippet, both measured
- * against this specific form:
+ * The height comes from useGhlEmbedHeight, which documents why GHL's own
+ * form_embed.js is not used.
  *
- * 1. No form_embed.js resizer. It reported a content height of 10520px for a
- *    form document that is 576px tall, leaving roughly 9900px of empty frame
- *    below the fields. The frame is sized by hand instead.
- *
- * 2. The frame is capped at the form's own max-width rather than filling its
- *    container. The form document paints no background, so any width beyond
- *    that renders as the browser's default white canvas in gutters either side.
- *
- * Measured document heights, since sizing by hand means the numbers have to be
- * real. The consent paragraphs wrap heavily as the frame narrows:
- *
- *   frame width   document height
- *   263px         916px            (320px viewport)
- *   293px         856px            (375px viewport)
- *   528px         596px            (640px viewport and up)
- *
- * Hence 940px below `sm` and 640px from `sm` up, each with headroom for inline
- * validation errors. Tailwind only emits classes it can see as literals, so
- * these cannot be interpolated from config.
- *
- * If fields are added or removed in GHL, re-measure and update both numbers,
- * and `width` in promos.ts if the form's width setting changes. Too short
- * clips the submit button; too tall returns the empty space this fixes.
+ * Why the height has to be exact rather than generous: the form document paints
+ * no background of its own, so everything outside `.form-builder--wrap` is the
+ * browser's default white canvas, and it is genuinely opaque. color-scheme:dark
+ * on the frame and allowtransparency were both tried and leave it white. So a
+ * frame taller than its content shows a white block, and a frame shorter than
+ * its content scrolls internally and hides the submit button. The content
+ * height is also a step function of width, 1139px at 238px wide against 718px
+ * at 526px, because the two consent paragraphs rewrap, so it cannot be pinned
+ * with a handful of breakpoints either.
  */
-const FRAME_HEIGHT = "h-[940px] sm:h-[640px]";
+
+/**
+ * Pre-JS floor, not a prediction. The form reports 912px at 526px wide when
+ * embedded cross-origin, and over 1100px on a narrow phone, so this is
+ * deliberately short of every real case: the live sizing takes over within a
+ * moment of load, and until it does an internal scrollbar is the cheaper
+ * failure. Raising it toward the real height would trade that scrollbar for a
+ * block of white canvas whenever the form comes in shorter, which is the one
+ * outcome there is no recovering from.
+ *
+ * Do not treat this as the form's height. Nothing reads it after the first
+ * measurement lands, and it needs no updating when the form changes in GHL.
+ */
+const FALLBACK_HEIGHT = "h-[718px]";
 
 export function GhlFormEmbed({
   formId,
   formName,
   origin,
-  width,
+  maxWidth,
   className,
 }: {
   formId: string;
   formName: string;
   origin: string;
-  width: number;
+  maxWidth: number;
   className?: string;
 }) {
   const embedId = `inline-${formId}`;
+  const { frameRef, height } = useGhlEmbedHeight({ embedId, origin, maxHeight: 2000 });
 
   return (
-    <div className={cn("w-full", className)}>
+    // The form draws a 1px white border and an 8px radius on its wrapper, both
+    // set in the GHL builder and both unreachable from here because the
+    // document is cross-origin. The frame is inset by 1px on every side inside
+    // this clip instead, which trims the border off and takes the white canvas
+    // in the rounded corners with it. If that border is later set to something
+    // dark in GHL, this trims 1px of the form's own padding and nothing looks
+    // different.
+    <div className={cn("mx-auto overflow-hidden rounded-[7px]", className)} style={{ maxWidth }}>
       <iframe
+        ref={frameRef}
         src={`${origin}/widget/form/${formId}`}
         id={embedId}
         title={formName}
-        className={cn("block w-full", FRAME_HEIGHT)}
-        style={{ maxWidth: width, marginInline: "auto", border: "none", background: "transparent" }}
+        className={cn("-m-px block w-[calc(100%_+_2px)] border-none", FALLBACK_HEIGHT)}
+        style={height ? { height } : undefined}
         data-layout="{'id':'INLINE'}"
         data-trigger-type="alwaysShow"
         data-trigger-value=""
