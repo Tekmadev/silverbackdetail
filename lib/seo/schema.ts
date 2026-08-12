@@ -4,7 +4,13 @@
  */
 
 import { businessConfig, type Service } from "@/lib/config/business";
-import { absoluteUrl, getOpeningHoursSpecification, formatPrice, getServicePricing } from "@/lib/config/site";
+import {
+  absoluteUrl,
+  siteOrigin,
+  getOpeningHoursSpecification,
+  formatPrice,
+  getServicePricing,
+} from "@/lib/config/site";
 import type { Faq } from "@/lib/data/content";
 
 const { name, legalName, address, contact, seo, serviceAreas } = businessConfig;
@@ -17,7 +23,7 @@ export function getLocalBusinessSchema(): Record<string, unknown> {
     name,
     legalName,
     description: businessConfig.longDescription,
-    url: seo.siteUrl,
+    url: siteOrigin(),
     telephone: contact.phone,
     email: contact.email,
     image: absoluteUrl(seo.ogImage),

@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { businessConfig } from "@/lib/config/business";
-import { absoluteUrl } from "@/lib/config/site";
+import { absoluteUrl, siteOrigin } from "@/lib/config/site";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 const fraunces = Fraunces({
@@ -22,7 +22,7 @@ const interTight = Inter_Tight({
 const { seo, name, legalName, contact, social } = businessConfig;
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || seo.siteUrl),
+  metadataBase: new URL(siteOrigin()),
   title: {
     default: seo.defaultTitle,
     template: seo.titleTemplate,
@@ -37,7 +37,10 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: seo.locale,
-    url: seo.siteUrl,
+    // Must resolve to the same host as the canonical above. When these disagree,
+    // Facebook and LinkedIn treat the two hosts as different pages and split the
+    // share count between them.
+    url: siteOrigin(),
     siteName: name,
     title: seo.defaultTitle,
     description: seo.defaultDescription,
@@ -75,7 +78,7 @@ export default function RootLayout({
         "@id": absoluteUrl("/#organization"),
         name,
         legalName,
-        url: seo.siteUrl,
+        url: siteOrigin(),
         email: contact.email,
         telephone: contact.phone,
         sameAs: [social.instagram.url, social.facebook.url, social.google.url],
@@ -83,7 +86,7 @@ export default function RootLayout({
       {
         "@type": "WebSite",
         "@id": absoluteUrl("/#website"),
-        url: seo.siteUrl,
+        url: siteOrigin(),
         name,
         publisher: { "@id": absoluteUrl("/#organization") },
         inLanguage: "en-CA",

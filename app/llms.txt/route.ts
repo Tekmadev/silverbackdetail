@@ -1,11 +1,11 @@
 import { businessConfig } from "@/lib/config/business";
-import { absoluteUrl, getServicePricing } from "@/lib/config/site";
+import { absoluteUrl, siteOrigin, getServicePricing } from "@/lib/config/site";
 
 // Regenerate occasionally; content is derived from the business config.
 export const revalidate = 86400;
 
 export async function GET() {
-  const { name, shortDescription, services, serviceAreas, contact, seo } = businessConfig;
+  const { name, shortDescription, services, serviceAreas, contact } = businessConfig;
 
   const lines = [
     `# ${name}`,
@@ -13,7 +13,7 @@ export async function GET() {
     `> ${shortDescription} ${businessConfig.longDescription}`,
     "",
     "## Key pages",
-    `- [Home](${seo.siteUrl}): Overview of premium detailing services in ${businessConfig.address.city}, Ontario.`,
+    `- [Home](${siteOrigin()}): Overview of premium detailing services in ${businessConfig.address.city}, Ontario.`,
     `- [Services](${absoluteUrl("/services")}): All detailing services with starting prices and what each includes.`,
     ...services.map((s) => {
       const p = getServicePricing(s);

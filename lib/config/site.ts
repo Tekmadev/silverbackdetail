@@ -215,14 +215,29 @@ export function getOpeningHoursSpecification() {
   }));
 }
 
-export const siteUrl = businessConfig.seo.siteUrl;
-
-/** Absolute URL helper that respects the deployment URL when available. */
-export function absoluteUrl(path = ""): string {
+/**
+ * The origin the site is actually served from, with no trailing slash.
+ *
+ * Use this for every URL the site publishes about itself. Never read
+ * `seo.siteUrl` directly: it holds the apex, while production serves www and
+ * 308-redirects the apex to it. Publishing the apex leaves the canonical tag
+ * saying one host and og:url and the JSON-LD saying another, which splits
+ * social share counts across two URLs and gives crawlers a mixed signal about
+ * which host is authoritative.
+ *
+ * `seo.siteUrl` survives only as the last-resort fallback below, for local runs
+ * with no environment at all.
+ */
+export function siteOrigin(): string {
   const base =
     process.env.NEXT_PUBLIC_SITE_URL ||
     (process.env.VERCEL_PROJECT_PRODUCTION_URL
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : businessConfig.seo.siteUrl);
-  return `${base.replace(/\/$/, "")}${path.startsWith("/") ? path : `/${path}`}`;
+  return base.replace(/\/$/, "");
+}
+
+/** Absolute URL helper that respects the deployment URL when available. */
+export function absoluteUrl(path = ""): string {
+  return `${siteOrigin()}${path.startsWith("/") ? path : `/${path}`}`;
 }
