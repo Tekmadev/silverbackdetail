@@ -22,8 +22,23 @@ export const businessConfig = {
 
   // Contact
   contact: {
+    // Reaches the shop directly during business hours.
     phone: "+1-905-519-6290",
     phoneDisplay: "(905) 519-6290",
+
+    /**
+     * The line that is answered around the clock, including outside opening
+     * hours, and the number printed on the ad creative so campaign calls stay
+     * attributable.
+     *
+     * Lives here rather than in promos.ts because it is a standing business
+     * line, not campaign config: deleting the ceramic promo must not take the
+     * 24/7 number off the site with it.
+     *
+     * Describe it to customers only as a line that is open 24/7.
+     */
+    phone24h: "+1-365-389-6767",
+    phone24hDisplay: "(365) 389-6767",
     email: "silverbackvehicledetailing@gmail.com",
     bookingEmail: "silverbackvehicledetailing@gmail.com",
     supportEmail: "silverbackvehicledetailing@gmail.com",
@@ -31,16 +46,27 @@ export const businessConfig = {
 
   // Physical address
   address: {
-    street: "981 Main Street West",
+    street: "7 Shamrock Ct",
     city: "Hamilton",
     province: "Ontario",
     provinceCode: "ON",
-    postalCode: "L8S 1A8",
+    postalCode: "L8V 4E2",
     country: "Canada",
     countryCode: "CA",
-    coordinates: { lat: 43.25778, lng: -79.90484 },
-    googleMapsUrl: "https://maps.google.com/?q=981+Main+Street+West+Hamilton+Ontario",
+    // Feeds GeoCoordinates in the LocalBusiness schema, so this is the pin
+    // Google places the shop on. Must be re-geocoded whenever the street
+    // changes, or the map points at the previous address.
+    coordinates: { lat: 43.21625, lng: -79.84523 },
+    googleMapsUrl: "https://maps.google.com/?q=7+Shamrock+Ct+Hamilton+Ontario+L8V+4E2",
   },
+
+  /**
+   * IANA timezone the shop actually operates in. Booking dates and times are
+   * stored without an offset, so anything deciding whether an appointment is
+   * past or upcoming has to resolve "today" against this rather than the
+   * server's clock, which on Vercel is UTC and four to five hours ahead.
+   */
+  timeZone: "America/Toronto",
 
   // Operating hours (24h format)
   hours: {

@@ -59,7 +59,7 @@ Safe version, no merge tags required, works for both in-shop and mobile bookings
 ```
 Silverback Detailing: you're booked. We've got your appointment locked in exactly as we discussed on the call.
 
-Coming to the shop? We're at 981 Main St W, Hamilton ON. Open 7 days, 10am to 9pm.
+Coming to the shop? We're at 7 Shamrock Ct, Hamilton ON. Open 7 days, 10am to 9pm.
 
 Need to change anything, just reply to this text or call 905-519-6290.
 
@@ -75,7 +75,7 @@ Silverback Detailing: you're booked, {{contact.first_name}}.
 
 Add it to your calendar: {{appointment.add_to_calendar}}
 
-Coming to us? We're at 981 Main St W, Hamilton ON.
+Coming to us? We're at 7 Shamrock Ct, Hamilton ON.
 Need to change anything? Reply here or call 905-519-6290.
 ```
 
@@ -132,7 +132,7 @@ Prices start at: headlight restoration 120, exterior detail 150, interior detail
 
 Want an exact number? Text a few photos of the car to this number, on WhatsApp or regular text, and we'll send a quote back.
 
-981 Main St W, Hamilton ON. Open 7 days, 10am to 9pm. 905-519-6290.
+7 Shamrock Ct, Hamilton ON. Open 7 days, 10am to 9pm. 905-519-6290.
 ```
 
 ### When should the sms delivery take place?
