@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Tells Gmail and Apple Mail this design is already dark, so they stop
+     "helpfully" inverting the colours and washing the whole thing out. -->
+<meta name="color-scheme" content="dark">
+<meta name="supported-color-schemes" content="dark">
+<title>Your booking is confirmed</title>
+<!--[if mso]>
+<noscript><xml><o:OfficeDocumentSettings>
+  <o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings></xml></noscript>
+<![endif]-->
+<style type="text/css">
+  /* Client resets. Not optional: Outlook and Gmail each break one of these. */
+  #outlook a { padding: 0; }
+  body { margin: 0; padding: 0; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+  table, td { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+  img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block; }
+  a { text-decoration: none; }
+
+  /* Stop iOS and Outlook auto-linking the address and phone in their own blue. */
+  a[x-apple-data-detectors], .unstyle-auto-detected-links a, .aBn {
+    color: inherit !important; text-decoration: none !important; font-size: inherit !important;
+    font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important;
+    border-bottom: 0 !important;
+  }
+
+  @media only screen and (max-width: 620px) {
+    .wrap { width: 100% !important; }
+    .px { padding-left: 22px !important; padding-right: 22px !important; }
+    .h1 { font-size: 30px !important; line-height: 36px !important; }
+    .stack { display: block !important; width: 100% !important; }
+    .stack-gap { height: 14px !important; line-height: 14px !important; }
+    .btn a { display: block !important; }
+  }
+</style>
+</head>
+
+<body style="margin:0; padding:0; background-color:#0a0a0b;">
+
+<!-- Preview line in the inbox list. Kept short so it is not truncated mid-word,
+     and padded with zero-width spaces so the client does not pull body copy in
+     after it. -->
+<div style="display:none; font-size:1px; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden; mso-hide:all;">
+  You're booked. Here are your date, time, and everything to know before you arrive.
+  &#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;
+</div>
+
+<table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#0a0a0b" style="background-color:#0a0a0b;">
+<tr>
+<td align="center" style="padding:24px 12px 40px 12px;">
+
+  <table role="presentation" class="wrap" width="600" border="0" cellpadding="0" cellspacing="0" style="width:600px; max-width:600px;">
+
+    <!-- View in browser -->
+    <tr>
+      <td align="center" style="padding:0 0 18px 0; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:16px; color:#6f727a; letter-spacing:0.04em;">
+        <a href="{{email.view_in_browser_url}}" style="color:#6f727a; text-decoration:underline;">View in browser</a>
+      </td>
+    </tr>
+
+    <!-- ================= CARD ================= -->
+    <tr>
+    <td bgcolor="#121214" style="background-color:#121214; border:1px solid #26262b; border-radius:16px;">
+
+      <!-- Logo -->
+      <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td align="center" class="px" style="padding:34px 32px 0 32px;">
+            <!-- Cloudinary, so the email does not depend on a site deploy and
+                 answers 200 directly with no redirect. Mail clients and image
+                 proxies frequently refuse to follow a redirect for an img src
+                 and fall back to alt text, which is what broke the earlier
+                 silverbackdetail.com version.
+
+                 The transformation matters. w_300 takes the source from 455KB
+                 down to 42KB, and f_png is pinned deliberately: f_auto would
+                 hand WebP to anything whose Accept header claims support, and
+                 Outlook on Windows cannot render WebP. Never swap this for
+                 f_auto.
+
+                 No border-radius: the badge is already circular with a
+                 transparent surround, so rounding the box would clip the ring. -->
+            <img src="https://res.cloudinary.com/dnly2ngqc/image/upload/w_300,q_auto:good,f_png/v1786512986/icon-512_pk2fmv.png"
+                 width="104" height="104" alt="Silverback Auto Detailing"
+                 style="width:104px; height:104px; display:block;">
+          </td>
+        </tr>
+
+        <!-- Headline -->
+        <tr>
+          <td align="center" class="px" style="padding:26px 32px 0 32px;">
+            <div style="font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:16px; letter-spacing:0.18em; text-transform:uppercase; color:#c7cad1;">
+              Booking confirmed
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" class="px h1" style="padding:12px 32px 0 32px; font-family:Georgia,'Times New Roman',serif; font-size:36px; line-height:42px; font-weight:normal; color:#f4f5f7; letter-spacing:-0.02em;">
+            You're booked.
+          </td>
+        </tr>
+        <tr>
+          <td align="center" class="px" style="padding:14px 32px 0 32px; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:24px; color:#9a9da6;">
+            Hi {{contact.first_name}}, your appointment is locked in. Here is everything you need.
+          </td>
+        </tr>
+
+        <!-- ============ APPOINTMENT PANEL ============ -->
+        <tr>
+          <td class="px" style="padding:28px 32px 0 32px;">
+            <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#1b1b1f" style="background-color:#1b1b1f; border:1px solid #26262b; border-radius:12px;">
+
+              <tr>
+                <td style="padding:22px 22px 0 22px; font-family:Arial,Helvetica,sans-serif; font-size:10px; line-height:14px; letter-spacing:0.16em; text-transform:uppercase; color:#6f727a;">
+                  Service
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:5px 22px 0 22px; font-family:Georgia,'Times New Roman',serif; font-size:19px; line-height:26px; color:#f4f5f7;">
+                  Ceramic Coating
+                </td>
+              </tr>
+
+              <tr><td style="padding:18px 22px 0 22px;"><div style="height:1px; line-height:1px; font-size:0; background-color:#26262b;">&nbsp;</div></td></tr>
+
+              <tr>
+                <td style="padding:18px 22px 0 22px; font-family:Arial,Helvetica,sans-serif; font-size:10px; line-height:14px; letter-spacing:0.16em; text-transform:uppercase; color:#6f727a;">
+                  When
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:5px 22px 0 22px; font-family:Georgia,'Times New Roman',serif; font-size:19px; line-height:26px; color:#f4f5f7;">
+                  {{appointment.start_time}}
+                </td>
+              </tr>
+
+              <tr><td style="padding:18px 22px 0 22px;"><div style="height:1px; line-height:1px; font-size:0; background-color:#26262b;">&nbsp;</div></td></tr>
+
+              <tr>
+                <td style="padding:18px 22px 0 22px; font-family:Arial,Helvetica,sans-serif; font-size:10px; line-height:14px; letter-spacing:0.16em; text-transform:uppercase; color:#6f727a;">
+                  Where
+                </td>
+              </tr>
+              <tr>
+                <td class="unstyle-auto-detected-links" style="padding:5px 22px 22px 22px; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:23px; color:#f4f5f7;">
+                  Silverback Detailing<br>
+                  7 Shamrock Ct, Hamilton, ON L8V 4E2<br>
+                  <a href="https://maps.google.com/?q=7+Shamrock+Ct+Hamilton+Ontario+L8V+4E2" style="color:#c7cad1; text-decoration:underline; font-size:14px;">Get directions</a>
+                </td>
+              </tr>
+
+            </table>
+          </td>
+        </tr>
+
+        <!-- Add to calendar -->
+        <tr>
+          <td align="center" class="px" style="padding:26px 32px 0 32px;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn">
+              <tr>
+                <td align="center" bgcolor="#d11a2a" style="background-color:#d11a2a; border-radius:10px;">
+                  <a href="{{appointment.add_to_calendar}}"
+                     style="display:inline-block; padding:15px 34px; font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:bold; line-height:20px; color:#ffffff; text-decoration:none; border-radius:10px;">
+                    Add to my calendar
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ============ BEFORE YOU ARRIVE ============ -->
+        <tr>
+          <td class="px" style="padding:34px 32px 0 32px;">
+            <div style="font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:16px; letter-spacing:0.18em; text-transform:uppercase; color:#c7cad1;">
+              Before you arrive
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="px" style="padding:14px 32px 0 32px;">
+            <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0">
+
+              <tr>
+                <td width="26" valign="top" style="padding:0 0 14px 0; font-family:Georgia,'Times New Roman',serif; font-size:15px; line-height:23px; color:#d11a2a;">01</td>
+                <td valign="top" style="padding:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:23px; color:#9a9da6;">
+                  <span style="color:#f4f5f7;">Clear your personal items.</span> Empty the cabin, glovebox, and boot so we can reach every surface.
+                </td>
+              </tr>
+              <tr>
+                <td width="26" valign="top" style="padding:0 0 14px 0; font-family:Georgia,'Times New Roman',serif; font-size:15px; line-height:23px; color:#d11a2a;">02</td>
+                <td valign="top" style="padding:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:23px; color:#9a9da6;">
+                  <span style="color:#f4f5f7;">Plan for 2 to 3 days.</span> Correction and coating cure in a controlled environment, so the car stays with us.
+                </td>
+              </tr>
+              <tr>
+                <td width="26" valign="top" style="padding:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:15px; line-height:23px; color:#d11a2a;">03</td>
+                <td valign="top" style="padding:0 0 4px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:23px; color:#9a9da6;">
+                  <span style="color:#f4f5f7;">Final price is confirmed on the day.</span> We assess size and paint condition with you before any work starts.
+                </td>
+              </tr>
+
+            </table>
+          </td>
+        </tr>
+
+        <!-- ============ CHANGE OF PLAN ============ -->
+        <tr>
+          <td class="px" style="padding:30px 32px 0 32px;">
+            <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #26262b; border-radius:12px;">
+              <tr>
+                <td style="padding:18px 20px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:22px; color:#9a9da6;">
+                  Need to change something? You can
+                  <a href="{{appointment.reschedule_link}}" style="color:#c7cad1; text-decoration:underline;">reschedule</a> or
+                  <a href="{{appointment.cancellation_link}}" style="color:#c7cad1; text-decoration:underline;">cancel</a>
+                  yourself, reply to this email, or call the line below at any hour. Free cancellation up to 24 hours before your appointment.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- ============ CONTACT ============ -->
+        <tr>
+          <td align="center" class="px" style="padding:30px 32px 0 32px; font-family:Arial,Helvetica,sans-serif; font-size:14px; line-height:22px; color:#9a9da6;">
+            Questions before then? Our line is open around the clock.
+          </td>
+        </tr>
+        <tr>
+          <td align="center" class="px" style="padding:14px 32px 0 32px;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td align="center" style="padding:0 5px;">
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                    <tr><td align="center" bgcolor="#1b1b1f" style="background-color:#1b1b1f; border:1px solid #26262b; border-radius:9px;">
+                      <a href="tel:+13653896767" style="display:inline-block; padding:12px 22px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:bold; line-height:18px; color:#f4f5f7; text-decoration:none;">Call or text</a>
+                    </td></tr>
+                  </table>
+                </td>
+                <td align="center" style="padding:0 5px;">
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                    <tr><td align="center" bgcolor="#1b1b1f" style="background-color:#1b1b1f; border:1px solid #26262b; border-radius:9px;">
+                      <a href="mailto:silverbackvehicledetailing@gmail.com" style="display:inline-block; padding:12px 22px; font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:bold; line-height:18px; color:#f4f5f7; text-decoration:none;">Email us</a>
+                    </td></tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" class="px unstyle-auto-detected-links" style="padding:16px 32px 0 32px; font-family:Georgia,'Times New Roman',serif; font-size:20px; line-height:26px; color:#f4f5f7;">
+            (365) 389-6767
+          </td>
+        </tr>
+        <tr>
+          <td align="center" class="px" style="padding:6px 32px 36px 32px; font-family:Arial,Helvetica,sans-serif; font-size:12px; line-height:18px; letter-spacing:0.1em; text-transform:uppercase; color:#c7cad1;">
+            Answered 24 hours a day, 7 days a week
+          </td>
+        </tr>
+
+      </table>
+    </td>
+    </tr>
+    <!-- =============== /CARD =============== -->
+
+    <!-- Sign-off -->
+    <tr>
+      <td align="center" style="padding:26px 20px 0 20px; font-family:Georgia,'Times New Roman',serif; font-size:16px; line-height:24px; color:#c7cad1;">
+        See you soon.
+      </td>
+    </tr>
+    <tr>
+      <td align="center" style="padding:4px 20px 0 20px; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:20px; color:#6f727a;">
+        The Silverback Detailing team
+      </td>
+    </tr>
+
+    <!-- Socials -->
+    <tr>
+      <td align="center" style="padding:24px 20px 0 20px; font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:20px;">
+        <a href="https://www.instagram.com/silverbackautodetailing" style="color:#c7cad1; text-decoration:none; padding:0 9px;">Instagram</a>
+        <span style="color:#33333a;">&bull;</span>
+        <a href="https://www.facebook.com/profile.php?id=61591317153492" style="color:#c7cad1; text-decoration:none; padding:0 9px;">Facebook</a>
+        <span style="color:#33333a;">&bull;</span>
+        <a href="https://silverbackdetail.com" style="color:#c7cad1; text-decoration:none; padding:0 9px;">Website</a>
+      </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+      <td align="center" class="unstyle-auto-detected-links" style="padding:22px 20px 0 20px; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:18px; color:#5c5f66;">
+        Silverback Detailing &middot; 7 Shamrock Ct, Hamilton, ON L8V 4E2, Canada<br>
+        &copy; {{right_now.year}} Silverback Detailing. All rights reserved.
+      </td>
+    </tr>
+    <tr>
+      <td align="center" style="padding:10px 20px 0 20px; font-family:Arial,Helvetica,sans-serif; font-size:11px; line-height:18px; color:#5c5f66;">
+        You are receiving this because you booked an appointment with us.<br>
+        <a href="{{email.unsubscribe_link}}" style="color:#5c5f66; text-decoration:underline;">Unsubscribe</a>
+      </td>
+    </tr>
+
+  </table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
