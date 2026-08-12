@@ -38,12 +38,36 @@ export async function saveBooking(record: BookingRecord): Promise<void> {
   if (error) console.error("[storage] saveBooking failed:", error.message);
 }
 
-export async function getBookingById(id: string): Promise<BookingRecord | null> {
-  if (!isSupabaseEnabled()) return null;
-  const db = getSupabaseAdmin();
-  if (!db) return null;
-  const { data, error } = await db.from("bookings").select("*").eq("id", id).maybeSingle();
-  if (error || !data) return null;
+/**
+ * A row as it comes back from `select("*")` on `bookings`. Mirrors
+ * supabase/schema.sql; the jsonb columns are typed through BookingRecord so the
+ * two definitions cannot disagree.
+ */
+export type BookingRow = {
+  id: string;
+  status: BookingRecord["status"];
+  created_at: string;
+  service_slug: string;
+  service_name: string;
+  price_from: number;
+  currency: string;
+  requires_deposit: boolean;
+  deposit_amount: number;
+  deposit_paid: boolean;
+  stripe_session_id: string | null;
+  vehicle: BookingRecord["vehicle"];
+  location: BookingRecord["location"];
+  date: string;
+  time: string;
+  customer: BookingRecord["customer"];
+};
+
+/**
+ * Maps a `bookings` row to the app's shape. Exported because the admin
+ * dashboard reads the same table and must not drift into a second, subtly
+ * different mapping of the same columns.
+ */
+export function rowToBooking(data: BookingRow): BookingRecord {
   return {
     id: data.id,
     status: data.status,
@@ -62,6 +86,15 @@ export async function getBookingById(id: string): Promise<BookingRecord | null> 
     time: data.time,
     customer: data.customer,
   };
+}
+
+export async function getBookingById(id: string): Promise<BookingRecord | null> {
+  if (!isSupabaseEnabled()) return null;
+  const db = getSupabaseAdmin();
+  if (!db) return null;
+  const { data, error } = await db.from("bookings").select("*").eq("id", id).maybeSingle();
+  if (error || !data) return null;
+  return rowToBooking(data);
 }
 
 export async function updateBooking(
