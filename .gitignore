@@ -32,12 +32,20 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...except the template, which holds only variable names and comments. Without
+# this negation the `.env*` rule above swallows it too, and the one file whose
+# whole job is to document required configuration never reaches the repo.
+!.env.example
 
 # vercel
 .vercel
 
 # local agent / editor config
 .claude/
+
+# GoHighLevel agent config, maintained locally and pasted into GHL
+docs/ai-receptionist/knowledge-base.md
+docs/ai-receptionist/system-prompt.md
 
 # typescript
 *.tsbuildinfo
